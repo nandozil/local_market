@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>고양특례시 고양페이 5% 캐시백 착한가격업소 지도 | 고양신문</title>
+  
+  <!-- SEO & Social Meta -->
+  <meta name="description" content="고양특례시 착한가격업소에서 고양페이로 결제하고 5% 추가 캐시백 혜택을 누리세요! 관내 87개 착한가격업소 위치, 주요품목, 길찾기 완벽 제공">
+  <meta property="og:title" content="고양시 착한가격업소 × 고양페이 5% 추가 캐시백 지도">
+  <meta property="og:description" content="고양특례시 87개 착한가격업소 위치와 혜택을 한눈에 확인하세요.">
+  <meta property="og:type" content="website">
+
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Leaflet & MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <!-- Chart.js for Infographics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --primary-light: #3b82f6;
+      --primary-bg: #eff6ff;
+      --accent-gold: #f59e0b;
+      --accent-gold-dark: #b45309;
+      --accent-gold-light: #fef3c7;
+      --success: #10b981;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top Announcement Bar */
+    .promo-bar {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #1d4ed8 100%);
+      color: #ffffff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.25);
+      z-index: 1000;
+      position: relative;
+    }
+
+    .promo-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .promo-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.3px;
+    }
+
+    .promo-logo i {
+      color: #fbbf24;
+      font-size: 1.3rem;
+    }
+
+    .cashback-pill {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      color: #78350f;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45);
+      animation: pulse 2.5s infinite;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .promo-desc {
+      font-size: 0.86rem;
+      color: #dbeafe;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .promo-desc span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .promo-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-action:hover {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* Main Container */
+    .app-main {
+      flex: 1;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 440px;
+      min-width: 380px;
+      background: #ffffff;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 500;
+      box-shadow: 2px 0 15px rgba(0,0,0,0.03);
+    }
+
+    /* Search & Filter Header */
+    .filter-section {
+      padding: 16px 18px 12px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* District Statistics Quick Bar */
+    .stats-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: var(--bg-page);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 6px 2px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .stat-box:hover {
+      background: rgba(255,255,255,0.7);
+    }
+
+    .stat-box.active {
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-count {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    /* Search Bar */
+    .search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 38px 10px 38px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s;
+      background: #f8fafc;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary-light);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    /* Category Filter Pills */
+    .category-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .category-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pill-btn {
+      white-space: nowrap;
+      padding: 5px 11px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: var(--text-sub);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pill-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .pill-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+    }
+
+    /* List Action / Sort Bar */
+    .list-meta-bar {
+      padding: 8px 18px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .count-highlight {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .gps-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .gps-btn:hover {
+      background: var(--primary-bg);
+      border-color: var(--primary);
+    }
+
+    /* Store List */
+    .store-list-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #f8fafc;
+    }
+
+    /* Store Card */
+    .store-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .store-card:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .store-card.selected {
+      border-color: var(--primary);
+      background: #f0f7ff;
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .district-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .district-badge.덕양구 { background: #dbeafe; color: #1e40af; }
+    .district-badge.일산동구 { background: #e0e7ff; color: #4338ca; }
+    .district-badge.일산서구 { background: #fae8ff; color: #86198f; }
+
+    .category-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .distance-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: none;
+    }
+
+    .store-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+
+    .store-menu {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #0369a1;
+      background: #f0f9ff;
+      border-left: 3px solid #0284c7;
+      padding: 5px 8px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .store-address {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .cashback-tag {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #b45309;
+      background: #fef3c7;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .nav-btn {
+      font-size: 0.74rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-kakao {
+      background: #fee500;
+      color: #191919;
+    }
+
+    .nav-kakao:hover {
+      background: #fada0a;
+    }
+
+    .nav-naver {
+      background: #03c75a;
+      color: #ffffff;
+    }
+
+    .nav-naver:hover {
+      background: #02b350;
+    }
+
+    /* Right Map Area */
+    .map-container {
+      flex: 1;
+      position: relative;
+      height: 100%;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Custom Map Floating Controls */
+    .map-floating-panel {
+      position: absolute;
+      top: 16px;
+      right: 70px;
+      z-index: 400;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .floating-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      max-width: 320px;
+    }
+
+    .floating-card h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .floating-card p {
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      line-height: 1.4;
+    }
+
+    /* Custom Leaflet Marker Styling */
+    .custom-marker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      cursor: pointer;
+      border: 2px solid #ffffff;
+      transition: transform 0.2s ease;
+    }
+
+    .custom-marker:hover {
+      transform: rotate(-45deg) scale(1.18);
+      z-index: 1000 !important;
+    }
+
+    .custom-marker i {
+      transform: rotate(45deg);
+      font-size: 15px;
+      color: #ffffff;
+    }
+
+    .marker-korean { background: #ea580c; }
+    .marker-chinese { background: #dc2626; }
+    .marker-japanese { background: #e11d48; }
+    .marker-cafe { background: #d97706; }
+    .marker-beauty { background: #7c3aed; }
+    .marker-life { background: #0891b2; }
+
+    /* Custom Popup Styling */
+    .leaflet-popup-content-wrapper {
+      padding: 0;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .leaflet-popup-content {
+      margin: 0;
+      width: 290px !important;
+      font-family: "Pretendard", sans-serif;
+    }
+
+    .popup-box {
+      padding: 16px;
+    }
+
+    .popup-header {
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .popup-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .popup-cashback-badge {
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      color: #78350f;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .popup-info-item {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.4;
+    }
+
+    .popup-menu-item {
+      background: #f0fdf4;
+      border-left: 3px solid #16a34a;
+      padding: 6px 10px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #15803d;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 10px;
+    }
+
+    .popup-nav-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .popup-nav-btn {
+      text-align: center;
+      padding: 8px 0;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 820px;
+      max-height: 90vh;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      z-index: 10;
+    }
+
+    .modal-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .infographic-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-container-box {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .chart-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .price-benchmark-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .price-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .price-card-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .price-card-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      margin-top: 4px;
+    }
+
+    .price-card-sub {
+      font-size: 0.72rem;
+      color: #15803d;
+      margin-top: 2px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 900px) {
+      .app-main {
+        flex-direction: column-reverse;
+      }
+
+      .sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: 52vh;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 -4px 15px rgba(0,0,0,0.06);
+      }
+
+      .map-container {
+        height: 48vh;
+      }
+
+      .promo-desc {
+        display: none;
+      }
+
+      .map-floating-panel {
+        display: none;
+      }
+
+      .infographic-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <header class="promo-bar">
+    <div class="promo-left">
+      <div class="promo-logo">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span>고양특례시 착한가격업소</span>
+      </div>
+      <div class="cashback-pill">
+        <i class="fa-solid fa-coins"></i>
+        <span>고양페이 +5% 추가 캐시백</span>
+      </div>
+    </div>
+    <div class="promo-desc">
+      <span><i class="fa-regular fa-calendar-check"></i> 2026. 9. 21.(월) ~ 12. 31.(목)</span>
+      <span><i class="fa-solid fa-wallet"></i> 충전금 결제 시 5% 캐시백</span>
+    </div>
+    <div class="promo-actions">
+      <button class="btn-action" id="btnOpenModal">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>통계 & 인포그래픽</span>
+      </button>
+      <button class="btn-action" id="btnHelp">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>혜택 안내</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- App Main -->
+  <main class="app-main">
+
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+
+      <!-- Filter Section -->
+      <div class="filter-section">
+        
+        <!-- District Quick Selector -->
+        <div class="stats-summary" id="districtStats">
+          <div class="stat-box active" data-district="all">
+            <div class="stat-label">전체 고양시</div>
+            <div class="stat-count" id="countAll">87</div>
+          </div>
+          <div class="stat-box" data-district="덕양구">
+            <div class="stat-label">덕양구</div>
+            <div class="stat-count" id="countDeogyang">39</div>
+          </div>
+          <div class="stat-box" data-district="일산동구">
+            <div class="stat-label">일산동구</div>
+            <div class="stat-count" id="countDonggu">26</div>
+          </div>
+          <div class="stat-box" data-district="일산서구">
+            <div class="stat-label">일산서구</div>
+            <div class="stat-count" id="countSeogu">22</div>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" class="search-input" placeholder="업소명, 동 이름(예: 화정, 장항), 메뉴 검색..." autocomplete="off">
+          <button id="searchClear" class="search-clear"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="category-pills" id="categoryPills">
+          <button class="pill-btn active" data-category="all"><i class="fa-solid fa-border-all"></i> 전체</button>
+          <button class="pill-btn" data-category="한식"><i class="fa-solid fa-bowl-rice"></i> 한식</button>
+          <button class="pill-btn" data-category="중식"><i class="fa-solid fa-bowl-food"></i> 중식</button>
+          <button class="pill-btn" data-category="일식/양식"><i class="fa-solid fa-utensils"></i> 일식·양식</button>
+          <button class="pill-btn" data-category="카페/베이커리"><i class="fa-solid fa-mug-saucer"></i> 카페·빵집</button>
+          <button class="pill-btn" data-category="미용/이용"><i class="fa-solid fa-scissors"></i> 미용·헤어</button>
+          <button class="pill-btn" data-category="생활/여가/기타"><i class="fa-solid fa-store"></i> 생활·기타</button>
+        </div>
+
+      </div>
+
+      <!-- List Metadata Bar -->
+      <div class="list-meta-bar">
+        <div>검색 결과: <span class="count-highlight" id="resultCount">87</span>개 업소</div>
+        <button class="gps-btn" id="btnMyLocation">
+          <i class="fa-solid fa-location-crosshairs"></i> 내 위치 주변 찾기
+        </button>
+      </div>
+
+      <!-- Store Card List -->
+      <div class="store-list-container" id="storeList">
+        <!-- Rendered by JavaScript -->
+      </div>
+
+    </aside>
+
+    <!-- Map Container -->
+    <section class="map-container">
+      <div id="map"></div>
+
+      <!-- Floating Notice Panel on Map -->
+      <div class="map-floating-panel">
+        <div class="floating-card">
+          <h4><i class="fa-solid fa-gift" style="color:#f59e0b;"></i> 알뜰 소비 & 5% 추가 캐시백</h4>
+          <p>
+            착한가격업소에서 <strong>고양페이 충전금</strong>으로 결제하시면 기본 혜택 외에 <strong>5% 추가 캐시백</strong>이 지급됩니다!
+            (마커 클릭 시 상세 품목 및 카카오/네이버 길찾기 지원)
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal: Infographic & Stats -->
+  <div class="modal-overlay" id="infoModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-chart-simple" style="color:var(--primary);"></i>
+          <span>고양특례시 착한가격업소 현황 및 통계 인포그래픽</span>
+        </div>
+        <button class="modal-close" id="btnCloseModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Summary Cards -->
+        <div class="price-benchmark-list">
+          <div class="price-card">
+            <div class="price-card-title">총 등록 업소수</div>
+            <div class="price-card-val">87개소</div>
+            <div class="price-card-sub"><i class="fa-solid fa-check"></i> 고양페이 5% 캐시백 가맹점</div>
+          </div>
+          <div class="price-card">
+            <div class="price-card-title">덕양구 등록수</div>
+            <div class="price-card-val">39개소 (44.8%)</div>
+            <div class="price-card-sub">화정·행신·원당 밀집</div>
+          </div>
+          <div class="price-card">
+            <div class="price-card-title">일산동구 등록수</div>
+            <div class="price-card-val">26개소 (29.9%)</div>
+            <div class="price-card-sub">백석·장항·라페스타 인근</div>
+          </div>
+          <div class="price-card">
+            <div class="price-card-title">일산서구 등록수</div>
+            <div class="price-card-val">22개소 (25.3%)</div>
+            <div class="price-card-sub">대화·주엽·일산역 주변</div>
+          </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="infographic-grid">
+          <div class="chart-container-box">
+            <div class="chart-title"><i class="fa-solid fa-chart-column"></i> 구별 착한가격업소 분포</div>
+            <canvas id="districtChart" height="220"></canvas>
+          </div>
+          <div class="chart-container-box">
+            <div class="chart-title"><i class="fa-solid fa-chart-pie"></i> 업종별 분류 구성비</div>
+            <canvas id="categoryChart" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Price Showcase -->
+        <div class="chart-container-box">
+          <div class="chart-title"><i class="fa-solid fa-tag"></i> 착한가격업소 대표 메뉴 시세 엿보기</div>
+          <div class="price-benchmark-list">
+            <div class="price-card">
+              <div class="price-card-title">유니짜장 / 자장면</div>
+              <div class="price-card-val">4,000 ~ 5,000원</div>
+              <div class="price-card-sub">황실짜장, 삼원각 등 5개소</div>
+            </div>
+            <div class="price-card">
+              <div class="price-card-title">남자/여자 커트</div>
+              <div class="price-card-val">7,000 ~ 10,000원</div>
+              <div class="price-card-sub">(sky)커트클럽 등 12개소</div>
+            </div>
+            <div class="price-card">
+              <div class="price-card-title">칼국수 / 잔치국수</div>
+              <div class="price-card-val">5,000 ~ 7,000원</div>
+              <div class="price-card-sub">진국수, 옛날칼국수 등 7개소</div>
+            </div>
+            <div class="price-card">
+              <div class="price-card-title">단팥빵 / 소금빵</div>
+              <div class="price-card-val">1,500 ~ 2,500원</div>
+              <div class="price-card-sub">가온베이커리, 원당식빵 등</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet & MarkerCluster JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <script>
+    // Inlined 87 Store Records
+    const STORES = [{"id": 1, "name": "(sky)커트클럽", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 152 (일산동) 106호", "item": "남자커트", "lat": 37.6765085686146, "lng": 126.769866084431, "group": "미용/이용"}, {"id": 2, "name": "62드립커피", "category": "기타요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 문봉길62번길 32-22 (문봉동) 1층", "item": "아메리카노", "lat": 37.7072337494199, "lng": 126.817697392564, "group": "카페/베이커리"}, {"id": 3, "name": "LCK전자", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 꽃마을로 46 (향동동) 1419호", "item": "출장수리비", "lat": 37.6012858991388, "lng": 126.892161201699, "group": "생활/여가/기타"}, {"id": 4, "name": "가온베이커리", "category": "베이커리", "district": "일산서구", "address": "경기도 고양시 일산서구 호수로 844 (대화동) 1층 103호", "item": "소금빵", "lat": 37.6702481474045, "lng": 126.74919513152, "group": "카페/베이커리"}, {"id": 5, "name": "가인헤어", "category": "미용업", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로88번길 8-11 (백석동) 1층", "item": "여성커트", "lat": 37.6476484713554, "lng": 126.789848147434, "group": "미용/이용"}, {"id": 6, "name": "고봉산 뼈 칼국수", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 무궁화로 20-11 (장항동) F동 119호", "item": "뼈칼국수", "lat": 37.6618340139268, "lng": 126.767543383883, "group": "한식"}, {"id": 7, "name": "고양 풀스윙 배팅센터", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 중앙로78번안길 119 (화전동) 비동", "item": "야구강습비 1회", "lat": 37.6002700309314, "lng": 126.875243759351, "group": "생활/여가/기타"}, {"id": 8, "name": "금석오리", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 꽃내음2길 50-2 (향동동) 1층", "item": "청국장", "lat": 37.6026026047579, "lng": 126.891178148989, "group": "한식"}, {"id": 9, "name": "기분좋은집", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1547 109호(대화동, KINTEX ZONE)", "item": "김밥", "lat": 37.6748086561938, "lng": 126.74954886289, "group": "한식"}, {"id": 10, "name": "김밥천사", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 충경로 38 1층 105호 (행신동, 진일프라자)", "item": "김밥", "lat": 37.6152019018014, "lng": 126.833710478936, "group": "한식"}, {"id": 11, "name": "김치찌개찌개", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 화신로 259 (화정동) 1층 101호", "item": "김치찌개", "lat": 37.6304152116174, "lng": 126.832419104114, "group": "한식"}, {"id": 12, "name": "까까 보까!", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 고양대로 719-12 (일산동, 산들마을6단지) 상가동 1층 104호", "item": "남자커트", "lat": 37.6839826397391, "lng": 126.776576155166, "group": "미용/이용"}, {"id": 13, "name": "냉동삼겹살", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로1261번길 17 (장항동) 2층 201호", "item": "점심뷔페", "lat": 37.6580203327856, "lng": 126.772808057261, "group": "한식"}, {"id": 14, "name": "네일도 반가워", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 킨텍스로 308 (주엽동) 상가동 109-1호", "item": "손 기본케어", "lat": 37.6720864807178, "lng": 126.753501344884, "group": "미용/이용"}, {"id": 15, "name": "달구족발", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 산현로92번길 60 (일산동) 114호-1", "item": "1kg족발", "lat": 37.6894236738297, "lng": 126.770822645745, "group": "한식"}, {"id": 16, "name": "대나무집", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로113번길 54-11 (백석동) 1층", "item": "능이닭곰탕", "lat": 37.6477897055783, "lng": 126.783940622866, "group": "한식"}, {"id": 17, "name": "도래울미용실", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 의장로 29-35 (도내동) 10호", "item": "여성커트", "lat": 37.6252054045044, "lng": 126.872862433134, "group": "미용/이용"}, {"id": 18, "name": "동양볼링장", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 816 4층(성사동, 동양빌딩)", "item": "1게임(일반)", "lat": 37.6580899280365, "lng": 126.838381369035, "group": "생활/여가/기타"}, {"id": 19, "name": "두리반찬", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 고봉로 20-21 (장항동) 117호", "item": "반찬(두부조림)", "lat": 37.663672082671, "lng": 126.765712129379, "group": "한식"}, {"id": 20, "name": "따뜻한 밥상 백석", "category": "한식_찌개류", "district": "일산동구", "address": "경기도 고양시 일산동구 백석로108번길 12 (백석동) 1층 일부호", "item": "김치찌개", "lat": 37.6484787274429, "lng": 126.789495100682, "group": "한식"}, {"id": 21, "name": "따뜻한 밥상 행신점", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로54번길 7-20 (행신동) 1층", "item": "김치찌개", "lat": 37.6185495413629, "lng": 126.832960093347, "group": "한식"}, {"id": 22, "name": "뚝방길생두루치기", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로6번길 12 (행신동) 101,102호", "item": "김치전골(2인)", "lat": 37.6130690857226, "lng": 126.833201138811, "group": "한식"}, {"id": 23, "name": "라브리", "category": "기타요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 원당로33번길 42-15 1층 (주교동)", "item": "아메리카노", "lat": 37.6582018826349, "lng": 126.830836246191, "group": "카페/베이커리"}, {"id": 24, "name": "라이프바디짐", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로196번길 7-5 (마두동) 라이프바디짐", "item": "헬스장 이용료(12개월)", "lat": 37.66318905, "lng": 126.78744048, "group": "생활/여가/기타"}, {"id": 25, "name": "레디퀸미용실", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1371 93-1호 1층(주엽동, 강선마을)", "item": "여자커트", "lat": 37.6671243360506, "lng": 126.765471646111, "group": "미용/이용"}, {"id": 26, "name": "마음한끼밥앤국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 서정마을2로 2 (행신동) 상가동 103호", "item": "잔치국수", "lat": 37.6207909663364, "lng": 126.845694239133, "group": "한식"}, {"id": 27, "name": "맛있는집", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1388 403호 (주엽동, 태영프라자)", "item": "된장찌개", "lat": 37.6683495423281, "lng": 126.765680991413, "group": "한식"}, {"id": 28, "name": "먹거리횟집", "category": "일식", "district": "일산동구", "address": "경기도 고양시 일산동구 백석로108번길 6-14 1층(백석동)", "item": "광어(중)", "lat": 37.6485708318108, "lng": 126.788601583957, "group": "일식/양식"}, {"id": 29, "name": "버블펫", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로 24 (장항동) 2층 A-263호", "item": "애견목욕(3kg이하)", "lat": 37.6558964094856, "lng": 126.772038816453, "group": "생활/여가/기타"}, {"id": 30, "name": "봄꽃네일", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 대화2로 137 (대화동) 상가동 2층 209호", "item": "속눈썹 펌", "lat": 37.6731243211164, "lng": 126.736178247722, "group": "미용/이용"}, {"id": 31, "name": "비스트로 케이(Bistro K)", "category": "양식", "district": "덕양구", "address": "경기도 고양시 덕양구 토당로 105 (토당동) 1층 106호", "item": "파스타", "lat": 37.6246372480964, "lng": 126.816643949728, "group": "일식/양식"}, {"id": 32, "name": "빵이랑", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 고양대로1384번길 6 (성사동) 어울림마을8단지 상가동 1층 9호", "item": "생크림케이크", "lat": 37.6539994959491, "lng": 126.837153431592, "group": "카페/베이커리"}, {"id": 33, "name": "살롱드헤어베리", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 도래울로 54 (도내동) 2층 203호", "item": "커트(여성)", "lat": 37.6306827129164, "lng": 126.869591788846, "group": "미용/이용"}, {"id": 34, "name": "삼원각", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 삼원로 2 (삼송동) 101,102호", "item": "짜장면", "lat": 37.6451579161333, "lng": 126.877480911566, "group": "중식"}, {"id": 35, "name": "삼파전", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 탄중로 311-16 (중산동,한진프라자 106호)", "item": "삼겹살100g", "lat": 37.6942081209285, "lng": 126.78014506906, "group": "한식"}, {"id": 36, "name": "상현스시", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 10 (탄현동) 1층", "item": "상현세트(초밥세트)", "lat": 37.6938556376355, "lng": 126.769747512506, "group": "일식/양식"}, {"id": 37, "name": "송송푸드", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1322 (정발산동) 1층 111-1호", "item": "라면", "lat": 37.6636768854432, "lng": 126.770816710089, "group": "한식"}, {"id": 38, "name": "순이네연탄갈비", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 16 (탄현동) 1층 상가", "item": "돼지갈비250g", "lat": 37.694099583968, "lng": 126.769682129544, "group": "한식"}, {"id": 39, "name": "신김밥천국", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 도래울1로 57 (도내동) 1층", "item": "김밥", "lat": 37.6286551593458, "lng": 126.869125768532, "group": "한식"}, {"id": 40, "name": "아하푸드", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 무궁화로 32-34 (장항동) 라페스타C동 117호", "item": "떡볶이", "lat": 37.6613188687547, "lng": 126.76879891373, "group": "한식"}, {"id": 41, "name": "앤도로시 샌드위치", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 용현로 21 (행신동) 103호", "item": "클럽샌드위치", "lat": 37.6146936611012, "lng": 126.835515096941, "group": "카페/베이커리"}, {"id": 42, "name": "양푼이생태탕", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 13 (탄현동) 1층", "item": "생태찌개", "lat": 37.6939309022068, "lng": 126.769441711845, "group": "한식"}, {"id": 43, "name": "어울림탁구장", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 원당로33번길 11 (주교동) 301호", "item": "월 회비", "lat": 37.6566374025653, "lng": 126.831517149083, "group": "생활/여가/기타"}, {"id": 44, "name": "영심이", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 마상로 140번길 2 1층(주교동, 화성빌딩)", "item": "떡볶이", "lat": 37.6592664701361, "lng": 126.838017293786, "group": "한식"}, {"id": 45, "name": "옛날칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 산두로 269-19 1층 (정발산동)", "item": "칼국수", "lat": 37.6747062896805, "lng": 126.777109645271, "group": "한식"}, {"id": 46, "name": "오늘도 응원할게", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 동송로 33 (동산동) 상가동 1층 27호", "item": "돼지불백 덮밥", "lat": 37.6490641128528, "lng": 126.896975022417, "group": "한식"}, {"id": 47, "name": "오늘은 바다", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 대화로 136 (대화동) 103호", "item": "연어초밥", "lat": 37.67062483046, "lng": 126.735293916334, "group": "일식/양식"}, {"id": 48, "name": "오병이어 커트하우스", "category": "이용업", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1391 (주엽동, 강선마을12단지아파트) 1층 제에스-12호", "item": "남자커트", "lat": 37.6679637231098, "lng": 126.764630034382, "group": "미용/이용"}, {"id": 49, "name": "오직 손 칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1130 (마두동, 강촌마을6단지아파트) 상가동 1층 A1-11호", "item": "들깨칼국수(2인)", "lat": 37.6501177027389, "lng": 126.780207120567, "group": "한식"}, {"id": 50, "name": "온담김밥", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 동송로 70 (삼송동) 1층 147호", "item": "김밥", "lat": 37.6526798112838, "lng": 126.896113096163, "group": "한식"}, {"id": 51, "name": "와이제이컴퍼니(YJ COMPANY)", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로 452 (정발산동) 304호", "item": "증명사진(8매)", "lat": 37.6740441266291, "lng": 126.776948397622, "group": "생활/여가/기타"}, {"id": 52, "name": "원당식빵", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 15 1(일부)층 (성사동)", "item": "단팥빵", "lat": 37.6577429834323, "lng": 126.838793389639, "group": "카페/베이커리"}, {"id": 53, "name": "원당칼국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 808 (성사동) 103호", "item": "칼국수", "lat": 37.6577793345656, "lng": 126.837837726033, "group": "한식"}, {"id": 54, "name": "월드사우나", "category": "목욕업", "district": "덕양구", "address": "경기도 고양시 덕양구 고양대로1315번길 86-18 2층~4층(주교동)", "item": "대인", "lat": 37.6594361781522, "lng": 126.830739834278, "group": "생활/여가/기타"}, {"id": 55, "name": "유소유", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 100 (토당동) 1층 114호", "item": "탕수육", "lat": 37.6260883105179, "lng": 126.824057521925, "group": "중식"}, {"id": 56, "name": "일산SK클라이밍", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로286번길 13-5 (마두동) 지층", "item": "베이직 기초강습(1개월)", "lat": 37.6618219403709, "lng": 126.78661307341, "group": "생활/여가/기타"}, {"id": 57, "name": "일산갈비", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 고양대로672번길 11 1층(일산동)", "item": "삼겹살100g", "lat": 37.6836494461578, "lng": 126.77056300179, "group": "한식"}, {"id": 58, "name": "일산돈가스", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 일중로 67-6 (일산동)", "item": "한식뷔페", "lat": 37.6858701555721, "lng": 126.774997017033, "group": "한식"}, {"id": 59, "name": "일산뽈집", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 168 (일산동) 2호", "item": "뽈살200g", "lat": 37.6777458211165, "lng": 126.770714493035, "group": "한식"}, {"id": 60, "name": "일오닭갈비", "category": "한식_육류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1305-56 (장항동) 라페스타D동 2층 201호", "item": "닭갈비(1인분)", "lat": 37.6610286903147, "lng": 126.76830760753, "group": "한식"}, {"id": 61, "name": "정감디자인스튜디오", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로 15 (장항동) 6층 605호", "item": "증명사진(8매)", "lat": 37.6564133865908, "lng": 126.77054892289, "group": "생활/여가/기타"}, {"id": 62, "name": "정다운분식", "category": "한식_분식", "district": "덕양구", "address": "경기도 고양시 덕양구 행신로143번길 28-34 (행신동) 104호", "item": "잔치국수", "lat": 37.6201380631005, "lng": 126.832509344564, "group": "한식"}, {"id": 63, "name": "정미용실", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 통일로 781 (관산동)", "item": "여자커트", "lat": 37.687828140781, "lng": 126.863598039208, "group": "미용/이용"}, {"id": 64, "name": "제이뷰티(Je Beauty)", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 원흥5로 25 (원흥동, 삼송원흥역센트럴푸르지오) 2층 217호", "item": "인중 왁싱(남성)", "lat": 37.6485750124376, "lng": 126.876556771514, "group": "미용/이용"}, {"id": 65, "name": "조선칼제비", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 토당로 115 1층 116호(토당동, 금호프라자)", "item": "들깨칼국수", "lat": 37.6254193067706, "lng": 126.816994100529, "group": "한식"}, {"id": 66, "name": "준탁구클럽", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 용현로5번길 24 207호(행신동, 백산오피스텔)", "item": "월레슨", "lat": 37.6135321883809, "lng": 126.834992009961, "group": "생활/여가/기타"}, {"id": 67, "name": "진가마솥돼지국밥", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로 142 (백석동) 1층 103호", "item": "돼지국밥", "lat": 37.6499235464051, "lng": 126.793731208213, "group": "한식"}, {"id": 68, "name": "진국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 2 1(일부)층(성사동)", "item": "잔치국수", "lat": 37.6578652346386, "lng": 126.838126753594, "group": "한식"}, {"id": 69, "name": "진커피", "category": "기타요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 100 112호 (토당동,파워프라자)", "item": "아메리카노", "lat": 37.6260883105179, "lng": 126.824057521925, "group": "카페/베이커리"}, {"id": 70, "name": "짐나지움 리틀&스위머스 탄", "category": "기타비요식업", "district": "일산서구", "address": "경기도 고양시 일산서구 일현로 140 (탄현동, 큰마을대림,현대아파트) 401호", "item": "성인수영반 월 레슨비", "lat": 37.7001466136168, "lng": 126.765548173106, "group": "생활/여가/기타"}, {"id": 71, "name": "짱구분식", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 82 (토당동, 휠탑빌라드)", "item": "김밥", "lat": 37.6244327132505, "lng": 126.824456989972, "group": "한식"}, {"id": 72, "name": "참치슈퍼", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 한류월드로 300 (대화동) 1179호", "item": "참다랑어(소)", "lat": 37.6645540981816, "lng": 126.754526582068, "group": "일식/양식"}, {"id": 73, "name": "첼로사진예술원", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로 170 (마두동) 202호", "item": "증명사진(9매)", "lat": 37.6539105078962, "lng": 126.784277135271, "group": "생활/여가/기타"}, {"id": 74, "name": "친친", "category": "중식", "district": "일산동구", "address": "경기도 고양시 일산동구 숲속마을1로 62-10 (풍동) 1층", "item": "짜장면", "lat": 37.6663735667529, "lng": 126.800653808406, "group": "중식"}, {"id": 75, "name": "코끼리김밥", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 59 107호(주엽동, 동신파크빌딩)", "item": "순두부찌개", "lat": 37.6695269076404, "lng": 126.764307728468, "group": "한식"}, {"id": 76, "name": "클럽클럽", "category": "이용업", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로789번길 6 1층 103호(주교동, 중앙빌딩)", "item": "남자커트", "lat": 37.6569880283436, "lng": 126.836096021601, "group": "미용/이용"}, {"id": 77, "name": "킹 당구클럽", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로6번길 36 3층 301~303호 (행신동,남정씨티프라자6차)", "item": "1시간", "lat": 37.614046396156, "lng": 126.833718262095, "group": "생활/여가/기타"}, {"id": 78, "name": "킹스크린골프", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 고봉로 32-12 (장항동) 5층 501~504호", "item": "주중 오전 (11시 이전)", "lat": 37.6643934379853, "lng": 126.765773331567, "group": "생활/여가/기타"}, {"id": 79, "name": "티파니", "category": "양식", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로 167 (마두동) 백암빌딩 1층 104호", "item": "새우 스파게티", "lat": 37.6535324803492, "lng": 126.783699834161, "group": "일식/양식"}, {"id": 80, "name": "팬브레드 PANBREAD", "category": "양식", "district": "덕양구", "address": "경기도 고양시 덕양구 흥도로417번길 10-17 (성사동) 1,2층", "item": "새우 크림 파스타", "lat": 37.6423957711046, "lng": 126.850232297213, "group": "일식/양식"}, {"id": 81, "name": "홍능골가든", "category": "한식_육류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 1268-7 (신원동)", "item": "돼지갈비100g", "lat": 37.6765448104028, "lng": 126.877442694281, "group": "한식"}, {"id": 82, "name": "홍두깨손칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1275번길 38-10 105-1호(장항동, 우림로데오스위트)", "item": "칼국수", "lat": 37.659914452377, "lng": 126.770892649054, "group": "한식"}, {"id": 83, "name": "황금콩짜장", "category": "중식", "district": "일산서구", "address": "경기도 고양시 일산서구 송산로 343 101호, 102호 (가좌동,송포프라자)", "item": "자장면", "lat": 37.6841330643554, "lng": 126.717124002649, "group": "중식"}, {"id": 84, "name": "황실짜장", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 20 101호 일부, 102호 일부(성사동)", "item": "유니짜장", "lat": 37.6574616992045, "lng": 126.838926818124, "group": "중식"}, {"id": 85, "name": "황태나라", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 숲속마을1로48번길 35 1층 상가(풍동)", "item": "된장찌개", "lat": 37.6667163257248, "lng": 126.800829478393, "group": "한식"}, {"id": 86, "name": "후스돈", "category": "한식_육류", "district": "덕양구", "address": "경기도 고양시 덕양구 마상로140번길 81 1층 (주교동,중경빌딩)", "item": "삼겹살100g", "lat": 37.6563804567281, "lng": 126.835162075538, "group": "한식"}, {"id": 87, "name": "흡이족발", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 킨텍스로 289 (대화동) 1층 101호", "item": "족발(대)", "lat": 37.6710653092733, "lng": 126.751995488189, "group": "한식"}];
+
+    // App State
+    let currentDistrict = 'all';
+    let currentCategory = 'all';
+    let currentSearch = '';
+    let userLocation = null;
+    let markersMap = {};
+    let markerClusterGroup = null;
+    let userMarker = null;
+
+    // Initialize Map centered on Goyang City
+    const map = L.map('map', {
+      zoomControl: true
+    }).setView([37.65836, 126.83204], 12);
+
+    // V-World Base Tile (국토교통부 브이월드 배경지도 - 한국어 최적화, 워터마크 없음)
+    const vworldBase = L.tileLayer('https://xdworld.vworld.kr/2d/Base/service/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      minZoom: 9,
+      attribution: '&copy; 공간정보오픈플랫폼(VWorld)'
+    }).addTo(map);
+
+    // OpenStreetMap as alternate layer
+    const osmBase = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    });
+
+    L.control.layers({
+      'V-World 한글지도': vworldBase,
+      'OpenStreetMap': osmBase
+    }, null, { position: 'topright' }).addTo(map);
+
+    // Helper: Haversine distance in km
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Earth radius in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    // Helper: Icon & Marker color by category group
+    function getMarkerIcon(group) {
+      let iconClass = 'fa-utensils';
+      let markerClass = 'marker-korean';
+      if (group === '한식') {
+        iconClass = 'fa-bowl-rice';
+        markerClass = 'marker-korean';
+      } else if (group === '중식') {
+        iconClass = 'fa-bowl-food';
+        markerClass = 'marker-chinese';
+      } else if (group === '일식/양식') {
+        iconClass = 'fa-utensils';
+        markerClass = 'marker-japanese';
+      } else if (group === '카페/베이커리') {
+        iconClass = 'fa-mug-saucer';
+        markerClass = 'marker-cafe';
+      } else if (group === '미용/이용') {
+        iconClass = 'fa-scissors';
+        markerClass = 'marker-beauty';
+      } else {
+        iconClass = 'fa-store';
+        markerClass = 'marker-life';
+      }
+
+      return L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div class="custom-marker ${markerClass}"><i class="fa-solid ${iconClass}"></i></div>`,
+        iconSize: [38, 38],
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -38]
+      });
+    }
+
+    // Initialize Markers & Clustering
+    function initMarkers() {
+      if (markerClusterGroup) {
+        map.removeLayer(markerClusterGroup);
+      }
+      markerClusterGroup = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        maxClusterRadius: 40,
+        spiderfyOnMaxZoom: true,
+        disableClusteringAtZoom: 16
+      });
+
+      markersMap = {};
+
+      STORES.forEach(store => {
+        const marker = L.marker([store.lat, store.lng], {
+          icon: getMarkerIcon(store.group),
+          title: store.name
+        });
+
+        // Popup Content
+        const kakaoNavUrl = `https://map.kakao.com/link/to/${encodeURIComponent(store.name)},${store.lat},${store.lng}`;
+        const naverNavUrl = `https://map.naver.com/v5/search/${encodeURIComponent(store.name)}`;
+
+        const popupContent = `
+          <div class="popup-box">
+            <div class="popup-header">
+              <div class="popup-title">
+                <span>${store.name}</span>
+                <span class="district-badge ${store.district}">${store.district}</span>
+              </div>
+              <div class="popup-cashback-badge">
+                <i class="fa-solid fa-coins"></i> 고양페이 5% 추가 캐시백
+              </div>
+            </div>
+            <div class="popup-menu-item">
+              <i class="fa-solid fa-check-circle"></i> 주요품목: ${store.item || '착한가격 제공'}
+            </div>
+            <div class="popup-info-item">
+              <i class="fa-solid fa-tag" style="color:#64748b;"></i>
+              <span>${store.category}</span>
+            </div>
+            <div class="popup-info-item">
+              <i class="fa-solid fa-location-dot" style="color:#64748b;"></i>
+              <span>${store.address}</span>
+            </div>
+            <div class="popup-nav-links">
+              <a href="${kakaoNavUrl}" target="_blank" class="popup-nav-btn nav-kakao">
+                <i class="fa-solid fa-diamond-turn-right"></i> 카카오 길찾기
+              </a>
+              <a href="${naverNavUrl}" target="_blank" class="popup-nav-btn nav-naver">
+                <i class="fa-solid fa-location-arrow"></i> 네이버 길찾기
+              </a>
+            </div>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent, { maxWidth: 300 });
+
+        marker.on('click', () => {
+          highlightCard(store.id);
+        });
+
+        markersMap[store.id] = marker;
+      });
+
+      map.addLayer(markerClusterGroup);
+    }
+
+    // Filter Stores Function
+    function getFilteredStores() {
+      return STORES.filter(store => {
+        // District filter
+        const matchDistrict = (currentDistrict === 'all') || (store.district === currentDistrict);
+        // Category filter
+        const matchCat = (currentCategory === 'all') || (store.group === currentCategory);
+        // Search filter
+        const q = currentSearch.toLowerCase().trim();
+        const matchSearch = !q || 
+          store.name.toLowerCase().includes(q) ||
+          store.address.toLowerCase().includes(q) ||
+          store.item.toLowerCase().includes(q) ||
+          store.category.toLowerCase().includes(q);
+
+        return matchDistrict && matchCat && matchSearch;
+      });
+    }
+
+    // Render Store List
+    function renderList() {
+      let filtered = getFilteredStores();
+
+      // If user location is active, sort by distance
+      if (userLocation) {
+        filtered.forEach(s => {
+          s.distance = calculateDistance(userLocation.lat, userLocation.lng, s.lat, s.lng);
+        });
+        filtered.sort((a, b) => a.distance - b.distance);
+      }
+
+      document.getElementById('resultCount').textContent = filtered.length;
+
+      const container = document.getElementById('storeList');
+      container.innerHTML = '';
+
+      // Update Cluster Group
+      markerClusterGroup.clearLayers();
+      const bounds = L.latLngBounds();
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-shop-slash"></i>
+            <p>조건에 맞는 착한가격업소가 없습니다.</p>
+            <p style="font-size:0.75rem; margin-top:4px;">검색어 또는 필터를 변경해보세요.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(store => {
+        const marker = markersMap[store.id];
+        if (marker) {
+          markerClusterGroup.addLayer(marker);
+          bounds.extend([store.lat, store.lng]);
+        }
+
+        const card = document.createElement('div');
+        card.className = 'store-card';
+        card.id = `card-${store.id}`;
+
+        let distanceHtml = '';
+        if (store.distance !== undefined) {
+          const distStr = store.distance < 1 
+            ? `${Math.round(store.distance * 1000)}m` 
+            : `${store.distance.toFixed(1)}km`;
+          distanceHtml = `<span class="distance-tag" style="display:inline-block;"><i class="fa-solid fa-person-walking"></i> ${distStr}</span>`;
+        }
+
+        const kakaoNavUrl = `https://map.kakao.com/link/to/${encodeURIComponent(store.name)},${store.lat},${store.lng}`;
+        const naverNavUrl = `https://map.naver.com/v5/search/${encodeURIComponent(store.name)}`;
+
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="card-badges">
+              <span class="district-badge ${store.district}">${store.district}</span>
+              <span class="category-badge">${store.category}</span>
+            </div>
+            ${distanceHtml}
+          </div>
+          <div class="store-title">
+            <span>${store.name}</span>
+          </div>
+          <div class="store-menu">
+            <i class="fa-solid fa-utensils"></i> ${store.item || '착한가격 제공'}
+          </div>
+          <div class="store-address">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>${store.address}</span>
+          </div>
+          <div class="card-footer">
+            <div class="cashback-tag">
+              <i class="fa-solid fa-coins"></i> 5% 추가 캐시백
+            </div>
+            <div class="card-actions">
+              <a href="${kakaoNavUrl}" target="_blank" class="nav-btn nav-kakao" onclick="event.stopPropagation();">
+                <i class="fa-solid fa-diamond-turn-right"></i> 카카오
+              </a>
+              <a href="${naverNavUrl}" target="_blank" class="nav-btn nav-naver" onclick="event.stopPropagation();">
+                <i class="fa-solid fa-location-arrow"></i> 네이버
+              </a>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          focusStore(store);
+        });
+
+        container.appendChild(card);
+      });
+
+      // Fit map view if bounds valid
+      if (filtered.length > 0 && bounds.isValid() && !userLocation) {
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+      }
+    }
+
+    // Focus store on click (handles cluster unspiderfy & zoom)
+    function focusStore(store) {
+      highlightCard(store.id);
+
+      const marker = markersMap[store.id];
+      if (marker) {
+        markerClusterGroup.zoomToShowLayer(marker, () => {
+          marker.openPopup();
+        });
+      }
+    }
+
+    function highlightCard(id) {
+      document.querySelectorAll('.store-card').forEach(c => c.classList.remove('selected'));
+      const targetCard = document.getElementById(`card-${id}`);
+      if (targetCard) {
+        targetCard.classList.add('selected');
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // District Filter Event
+    document.querySelectorAll('#districtStats .stat-box').forEach(box => {
+      box.addEventListener('click', () => {
+        document.querySelectorAll('#districtStats .stat-box').forEach(b => b.classList.remove('active'));
+        box.classList.add('active');
+        currentDistrict = box.getAttribute('data-district');
+        renderList();
+      });
+    });
+
+    // Category Filter Event
+    document.querySelectorAll('#categoryPills .pill-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#categoryPills .pill-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.getAttribute('data-category');
+        renderList();
+      });
+    });
+
+    // Search Input Event
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+
+    searchInput.addEventListener('input', (e) => {
+      currentSearch = e.target.value;
+      searchClear.style.display = currentSearch ? 'block' : 'none';
+      renderList();
+    });
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = '';
+      currentSearch = '';
+      searchClear.style.display = 'none';
+      renderList();
+    });
+
+    // Geolocation Event
+    document.getElementById('btnMyLocation').addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        alert('이 브라우저에서는 위치 서비스를 지원하지 않습니다.');
+        return;
+      }
+
+      const btn = document.getElementById('btnMyLocation');
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 위치 확인 중...`;
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          // Draw user pulse marker
+          if (userMarker) {
+            map.removeLayer(userMarker);
+          }
+          userMarker = L.circleMarker([userLocation.lat, userLocation.lng], {
+            radius: 8,
+            fillColor: '#1d4ed8',
+            color: '#ffffff',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 0.9
+          }).addTo(map);
+
+          userMarker.bindPopup('<strong>📍 현재 나의 위치</strong>').openPopup();
+          map.setView([userLocation.lat, userLocation.lng], 14);
+
+          btn.innerHTML = `<i class="fa-solid fa-check"></i> 내 위치 적용됨`;
+          renderList();
+        },
+        (error) => {
+          btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> 내 위치 주변 찾기`;
+          alert('현재 위치 정보를 가져올 수 없습니다. 브라우저 위치 권한을 확인해주세요.');
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    });
+
+    // Infographic Modal Charts
+    let districtChartInstance = null;
+    let categoryChartInstance = null;
+
+    function initCharts() {
+      if (districtChartInstance) return;
+
+      // 1. District Chart
+      const ctxDistrict = document.getElementById('districtChart').getContext('2d');
+      districtChartInstance = new Chart(ctxDistrict, {
+        type: 'bar',
+        data: {
+          labels: ['덕양구', '일산동구', '일산서구'],
+          datasets: [{
+            label: '착한가격업소 수',
+            data: [39, 26, 22],
+            backgroundColor: ['#2563eb', '#4f46e5', '#db2777'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+
+      // 2. Category Chart
+      const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+      categoryChartInstance = new Chart(ctxCategory, {
+        type: 'doughnut',
+        data: {
+          labels: ['한식 (41)', '중식 (5)', '일식·양식 (7)', '카페·베이커리 (7)', '미용·헤어 (12)', '생활·여가 (15)'],
+          datasets: [{
+            data: [41, 5, 7, 7, 12, 15],
+            backgroundColor: [
+              '#ea580c',
+              '#dc2626',
+              '#e11d48',
+              '#d97706',
+              '#7c3aed',
+              '#0891b2'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    // Modal Events
+    const modal = document.getElementById('infoModal');
+    document.getElementById('btnOpenModal').addEventListener('click', () => {
+      modal.classList.add('active');
+      initCharts();
+    });
+
+    document.getElementById('btnCloseModal').addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    document.getElementById('btnHelp').addEventListener('click', () => {
+      alert(`[고양페이 5% 추가 캐시백 이벤트 안내]
+○ 행사기간: 2026. 9. 21.(월) ~ 12. 31.(목) (예산 소진 시 조기종료)
+○ 지원대상: 고양페이 가맹 착한가격업소 이용자
+○ 혜택내용: 본인 충전금 사용액의 5% 즉시 추가 캐시백 지급
+※ 주의사항: 지자체 지급 인센티브 사용분은 캐시백 산정에서 제외됩니다.`);
+    });
+
+    // Start App
+    initMarkers();
+    renderList();
+  </script>
+</body>
+</html>
