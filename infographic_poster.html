@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>고양특례시 고양페이 착한가격업소 종합 인포그래픽</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -9,93 +10,120 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Pretendard", sans-serif; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; 
+    }
     body {
       background: #f1f5f9;
       display: flex;
       justify-content: center;
-      padding: 30px;
+      padding: 24px;
       color: #0f172a;
+      min-height: 100vh;
     }
     .poster-container {
-      width: 100%; max-width: 1400px; box-sizing: border-box;
+      width: 100%;
+      max-width: 1300px;
       background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
       overflow: hidden;
       border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
     }
+    
+    /* Header */
     .poster-header {
       background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%);
       color: white;
-      padding: 36px 48px;
+      padding: 36px 44px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .header-text-group {
+      flex: 1 1 500px;
+      min-width: 0;
     }
     .header-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
-      padding: 4px 14px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 5px 14px;
       border-radius: 9999px;
       font-size: 0.88rem;
       font-weight: 700;
       margin-bottom: 12px;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.3px;
     }
     .poster-title {
-      font-size: 2.2rem;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
       font-weight: 900;
-      letter-spacing: -1px;
-      line-height: 1.25;
+      letter-spacing: -0.8px;
+      line-height: 1.3;
       word-break: keep-all;
     }
     .poster-title span {
       color: #fbbf24;
     }
     .header-sub {
-      margin-top: 10px;
-      font-size: 1.05rem;
+      margin-top: 12px;
+      font-size: 1rem;
       color: #dbeafe;
       display: flex;
-      gap: 20px;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      word-break: keep-all;
+    }
+    .header-sub span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .cashback-badge-large {
-      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
       color: #78350f;
       padding: 16px 28px;
-      border-radius: 16px;
+      border-radius: 18px;
       text-align: center;
-      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+      box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
+      flex-shrink: 0;
     }
     .cashback-badge-large .num {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 900;
       line-height: 1;
     }
     .cashback-badge-large .txt {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 800;
       margin-top: 4px;
+      white-space: nowrap;
     }
     
     /* Top 4 Stats */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      padding: 28px 48px 16px;
+      gap: 16px;
+      padding: 24px 44px 16px;
     }
     .stat-card {
       background: #f8fafc;
       border: 1.5px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 20px 24px;
-      position: relative;
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .stat-card.primary {
       background: #eff6ff;
@@ -107,30 +135,32 @@
       color: #64748b;
     }
     .stat-card-val {
-      font-size: 2.2rem;
+      font-size: 2.1rem;
       font-weight: 900;
       color: #1e3a8a;
-      margin-top: 6px;
+      margin-top: 4px;
+      letter-spacing: -0.5px;
     }
     .stat-card-sub {
       font-size: 0.82rem;
       font-weight: 600;
       color: #0284c7;
       margin-top: 4px;
+      word-break: keep-all;
     }
 
     /* Main Grid */
     .poster-grid {
       display: grid;
       grid-template-columns: 58% 42%;
-      gap: 24px;
-      padding: 16px 48px 36px;
+      gap: 20px;
+      padding: 16px 44px 36px;
     }
     .grid-box {
       background: #ffffff;
       border: 1.5px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 24px;
+      border-radius: 18px;
+      padding: 22px;
       display: flex;
       flex-direction: column;
     }
@@ -138,7 +168,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
     .box-title {
       font-size: 1.15rem;
@@ -147,6 +179,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      word-break: keep-all;
     }
     .box-title i {
       color: #2563eb;
@@ -154,33 +187,34 @@
     #mapPoster {
       width: 100%;
       height: 600px;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid #cbd5e1;
+      z-index: 1;
     }
 
     /* Price Table Cards */
     .price-mini-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 12px;
     }
     .price-mini-card {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 12px 14px;
     }
-    .price-mini-title { font-size: 0.82rem; color: #64748b; font-weight: 700; }
-    .price-mini-num { font-size: 1.2rem; font-weight: 900; color: #1e40af; margin-top: 2px; }
-    .price-mini-desc { font-size: 0.75rem; color: #16a34a; font-weight: 600; }
+    .price-mini-title { font-size: 0.82rem; color: #64748b; font-weight: 700; word-break: keep-all; }
+    .price-mini-num { font-size: 1.15rem; font-weight: 900; color: #1e40af; margin-top: 2px; }
+    .price-mini-desc { font-size: 0.75rem; color: #16a34a; font-weight: 600; margin-top: 2px; word-break: keep-all; }
 
     /* Event Notice Box */
     .event-info-box {
       background: #fefce8;
       border: 1.5px solid #fef08a;
-      border-radius: 12px;
-      padding: 16px 20px;
+      border-radius: 14px;
+      padding: 16px 18px;
       margin-top: 18px;
     }
     .event-info-box h5 {
@@ -202,6 +236,84 @@
       content: "• ";
       font-weight: bold;
     }
+
+    /* Tablet & Mobile Media Queries */
+    @media (max-width: 1024px) {
+      body {
+        padding: 14px;
+      }
+      .poster-header {
+        padding: 28px 24px;
+      }
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 18px 24px 10px;
+        gap: 12px;
+      }
+      .poster-grid {
+        grid-template-columns: 1fr;
+        padding: 12px 24px 28px;
+      }
+      #mapPoster {
+        height: 480px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+      .poster-container {
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+      .poster-header {
+        padding: 24px 16px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .cashback-badge-large {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        padding: 12px;
+      }
+      .cashback-badge-large .num {
+        font-size: 1.8rem;
+      }
+      .cashback-badge-large .txt {
+        margin-top: 0;
+      }
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 14px 14px 8px;
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 14px 12px;
+      }
+      .stat-card-val {
+        font-size: 1.7rem;
+      }
+      .poster-grid {
+        padding: 8px 14px 24px;
+        gap: 16px;
+      }
+      .grid-box {
+        padding: 16px 14px;
+      }
+      #mapPoster {
+        height: 380px;
+      }
+      .price-mini-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -210,7 +322,7 @@
     
     <!-- Header -->
     <div class="poster-header">
-      <div>
+      <div class="header-text-group">
         <div class="header-tag">
           <i class="fa-solid fa-certificate"></i> 고양특례시 × 고양신문 특별기획
         </div>
@@ -277,8 +389,8 @@
             <span>업종별 현황 구성비</span>
           </div>
         </div>
-        <div style="height: 190px; display:flex; justify-content:center; align-items:center;">
-          <canvas id="categoryDonut" height="180"></canvas>
+        <div style="height: 190px; display:flex; justify-content:center; align-items:center; position: relative;">
+          <canvas id="categoryDonut"></canvas>
         </div>
 
         <!-- Prices -->
@@ -328,11 +440,99 @@
   </div>
 
   <script>
-    const STORES = [{"id": 1, "name": "(sky)커트클럽", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 152 (일산동) 106호", "item": "남자커트", "lat": 37.6765085686146, "lng": 126.769866084431, "group": "미용/이용"}, {"id": 2, "name": "62드립커피", "category": "기타요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 문봉길62번길 32-22 (문봉동) 1층", "item": "아메리카노", "lat": 37.7072337494199, "lng": 126.817697392564, "group": "카페/베이커리"}, {"id": 3, "name": "LCK전자", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 꽃마을로 46 (향동동) 1419호", "item": "출장수리비", "lat": 37.6012858991388, "lng": 126.892161201699, "group": "생활/여가/기타"}, {"id": 4, "name": "가온베이커리", "category": "베이커리", "district": "일산서구", "address": "경기도 고양시 일산서구 호수로 844 (대화동) 1층 103호", "item": "소금빵", "lat": 37.6702481474045, "lng": 126.74919513152, "group": "카페/베이커리"}, {"id": 5, "name": "가인헤어", "category": "미용업", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로88번길 8-11 (백석동) 1층", "item": "여성커트", "lat": 37.6476484713554, "lng": 126.789848147434, "group": "미용/이용"}, {"id": 6, "name": "고봉산 뼈 칼국수", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 무궁화로 20-11 (장항동) F동 119호", "item": "뼈칼국수", "lat": 37.6618340139268, "lng": 126.767543383883, "group": "한식"}, {"id": 7, "name": "고양 풀스윙 배팅센터", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 중앙로78번안길 119 (화전동) 비동", "item": "야구강습비 1회", "lat": 37.6002700309314, "lng": 126.875243759351, "group": "생활/여가/기타"}, {"id": 8, "name": "금석오리", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 꽃내음2길 50-2 (향동동) 1층", "item": "청국장", "lat": 37.6026026047579, "lng": 126.891178148989, "group": "한식"}, {"id": 9, "name": "기분좋은집", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1547 109호(대화동, KINTEX ZONE)", "item": "김밥", "lat": 37.6748086561938, "lng": 126.74954886289, "group": "한식"}, {"id": 10, "name": "김밥천사", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 충경로 38 1층 105호 (행신동, 진일프라자)", "item": "김밥", "lat": 37.6152019018014, "lng": 126.833710478936, "group": "한식"}, {"id": 11, "name": "김치찌개찌개", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 화신로 259 (화정동) 1층 101호", "item": "김치찌개", "lat": 37.6304152116174, "lng": 126.832419104114, "group": "한식"}, {"id": 12, "name": "까까 보까!", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 고양대로 719-12 (일산동, 산들마을6단지) 상가동 1층 104호", "item": "남자커트", "lat": 37.6839826397391, "lng": 126.776576155166, "group": "미용/이용"}, {"id": 13, "name": "냉동삼겹살", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로1261번길 17 (장항동) 2층 201호", "item": "점심뷔페", "lat": 37.6580203327856, "lng": 126.772808057261, "group": "한식"}, {"id": 14, "name": "네일도 반가워", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 킨텍스로 308 (주엽동) 상가동 109-1호", "item": "손 기본케어", "lat": 37.6720864807178, "lng": 126.753501344884, "group": "미용/이용"}, {"id": 15, "name": "달구족발", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 산현로92번길 60 (일산동) 114호-1", "item": "1kg족발", "lat": 37.6894236738297, "lng": 126.770822645745, "group": "한식"}, {"id": 16, "name": "대나무집", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로113번길 54-11 (백석동) 1층", "item": "능이닭곰탕", "lat": 37.6477897055783, "lng": 126.783940622866, "group": "한식"}, {"id": 17, "name": "도래울미용실", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 의장로 29-35 (도내동) 10호", "item": "여성커트", "lat": 37.6252054045044, "lng": 126.872862433134, "group": "미용/이용"}, {"id": 18, "name": "동양볼링장", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 816 4층(성사동, 동양빌딩)", "item": "1게임(일반)", "lat": 37.6580899280365, "lng": 126.838381369035, "group": "생활/여가/기타"}, {"id": 19, "name": "두리반찬", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 고봉로 20-21 (장항동) 117호", "item": "반찬(두부조림)", "lat": 37.663672082671, "lng": 126.765712129379, "group": "한식"}, {"id": 20, "name": "따뜻한 밥상 백석", "category": "한식_찌개류", "district": "일산동구", "address": "경기도 고양시 일산동구 백석로108번길 12 (백석동) 1층 일부호", "item": "김치찌개", "lat": 37.6484787274429, "lng": 126.789495100682, "group": "한식"}, {"id": 21, "name": "따뜻한 밥상 행신점", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로54번길 7-20 (행신동) 1층", "item": "김치찌개", "lat": 37.6185495413629, "lng": 126.832960093347, "group": "한식"}, {"id": 22, "name": "뚝방길생두루치기", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로6번길 12 (행신동) 101,102호", "item": "김치전골(2인)", "lat": 37.6130690857226, "lng": 126.833201138811, "group": "한식"}, {"id": 23, "name": "라브리", "category": "기타요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 원당로33번길 42-15 1층 (주교동)", "item": "아메리카노", "lat": 37.6582018826349, "lng": 126.830836246191, "group": "카페/베이커리"}, {"id": 24, "name": "라이프바디짐", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로196번길 7-5 (마두동) 라이프바디짐", "item": "헬스장 이용료(12개월)", "lat": 37.66318905, "lng": 126.78744048, "group": "생활/여가/기타"}, {"id": 25, "name": "레디퀸미용실", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1371 93-1호 1층(주엽동, 강선마을)", "item": "여자커트", "lat": 37.6671243360506, "lng": 126.765471646111, "group": "미용/이용"}, {"id": 26, "name": "마음한끼밥앤국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 서정마을2로 2 (행신동) 상가동 103호", "item": "잔치국수", "lat": 37.6207909663364, "lng": 126.845694239133, "group": "한식"}, {"id": 27, "name": "맛있는집", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1388 403호 (주엽동, 태영프라자)", "item": "된장찌개", "lat": 37.6683495423281, "lng": 126.765680991413, "group": "한식"}, {"id": 28, "name": "먹거리횟집", "category": "일식", "district": "일산동구", "address": "경기도 고양시 일산동구 백석로108번길 6-14 1층(백석동)", "item": "광어(중)", "lat": 37.6485708318108, "lng": 126.788601583957, "group": "일식/양식"}, {"id": 29, "name": "버블펫", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로 24 (장항동) 2층 A-263호", "item": "애견목욕(3kg이하)", "lat": 37.6558964094856, "lng": 126.772038816453, "group": "생활/여가/기타"}, {"id": 30, "name": "봄꽃네일", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 대화2로 137 (대화동) 상가동 2층 209호", "item": "속눈썹 펌", "lat": 37.6731243211164, "lng": 126.736178247722, "group": "미용/이용"}, {"id": 31, "name": "비스트로 케이(Bistro K)", "category": "양식", "district": "덕양구", "address": "경기도 고양시 덕양구 토당로 105 (토당동) 1층 106호", "item": "파스타", "lat": 37.6246372480964, "lng": 126.816643949728, "group": "일식/양식"}, {"id": 32, "name": "빵이랑", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 고양대로1384번길 6 (성사동) 어울림마을8단지 상가동 1층 9호", "item": "생크림케이크", "lat": 37.6539994959491, "lng": 126.837153431592, "group": "카페/베이커리"}, {"id": 33, "name": "살롱드헤어베리", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 도래울로 54 (도내동) 2층 203호", "item": "커트(여성)", "lat": 37.6306827129164, "lng": 126.869591788846, "group": "미용/이용"}, {"id": 34, "name": "삼원각", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 삼원로 2 (삼송동) 101,102호", "item": "짜장면", "lat": 37.6451579161333, "lng": 126.877480911566, "group": "중식"}, {"id": 35, "name": "삼파전", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 탄중로 311-16 (중산동,한진프라자 106호)", "item": "삼겹살100g", "lat": 37.6942081209285, "lng": 126.78014506906, "group": "한식"}, {"id": 36, "name": "상현스시", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 10 (탄현동) 1층", "item": "상현세트(초밥세트)", "lat": 37.6938556376355, "lng": 126.769747512506, "group": "일식/양식"}, {"id": 37, "name": "송송푸드", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1322 (정발산동) 1층 111-1호", "item": "라면", "lat": 37.6636768854432, "lng": 126.770816710089, "group": "한식"}, {"id": 38, "name": "순이네연탄갈비", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 16 (탄현동) 1층 상가", "item": "돼지갈비250g", "lat": 37.694099583968, "lng": 126.769682129544, "group": "한식"}, {"id": 39, "name": "신김밥천국", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 도래울1로 57 (도내동) 1층", "item": "김밥", "lat": 37.6286551593458, "lng": 126.869125768532, "group": "한식"}, {"id": 40, "name": "아하푸드", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 무궁화로 32-34 (장항동) 라페스타C동 117호", "item": "떡볶이", "lat": 37.6613188687547, "lng": 126.76879891373, "group": "한식"}, {"id": 41, "name": "앤도로시 샌드위치", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 용현로 21 (행신동) 103호", "item": "클럽샌드위치", "lat": 37.6146936611012, "lng": 126.835515096941, "group": "카페/베이커리"}, {"id": 42, "name": "양푼이생태탕", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 13 (탄현동) 1층", "item": "생태찌개", "lat": 37.6939309022068, "lng": 126.769441711845, "group": "한식"}, {"id": 43, "name": "어울림탁구장", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 원당로33번길 11 (주교동) 301호", "item": "월 회비", "lat": 37.6566374025653, "lng": 126.831517149083, "group": "생활/여가/기타"}, {"id": 44, "name": "영심이", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 마상로 140번길 2 1층(주교동, 화성빌딩)", "item": "떡볶이", "lat": 37.6592664701361, "lng": 126.838017293786, "group": "한식"}, {"id": 45, "name": "옛날칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 산두로 269-19 1층 (정발산동)", "item": "칼국수", "lat": 37.6747062896805, "lng": 126.777109645271, "group": "한식"}, {"id": 46, "name": "오늘도 응원할게", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 동송로 33 (동산동) 상가동 1층 27호", "item": "돼지불백 덮밥", "lat": 37.6490641128528, "lng": 126.896975022417, "group": "한식"}, {"id": 47, "name": "오늘은 바다", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 대화로 136 (대화동) 103호", "item": "연어초밥", "lat": 37.67062483046, "lng": 126.735293916334, "group": "일식/양식"}, {"id": 48, "name": "오병이어 커트하우스", "category": "이용업", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1391 (주엽동, 강선마을12단지아파트) 1층 제에스-12호", "item": "남자커트", "lat": 37.6679637231098, "lng": 126.764630034382, "group": "미용/이용"}, {"id": 49, "name": "오직 손 칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1130 (마두동, 강촌마을6단지아파트) 상가동 1층 A1-11호", "item": "들깨칼국수(2인)", "lat": 37.6501177027389, "lng": 126.780207120567, "group": "한식"}, {"id": 50, "name": "온담김밥", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 동송로 70 (삼송동) 1층 147호", "item": "김밥", "lat": 37.6526798112838, "lng": 126.896113096163, "group": "한식"}, {"id": 51, "name": "와이제이컴퍼니(YJ COMPANY)", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로 452 (정발산동) 304호", "item": "증명사진(8매)", "lat": 37.6740441266291, "lng": 126.776948397622, "group": "생활/여가/기타"}, {"id": 52, "name": "원당식빵", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 15 1(일부)층 (성사동)", "item": "단팥빵", "lat": 37.6577429834323, "lng": 126.838793389639, "group": "카페/베이커리"}, {"id": 53, "name": "원당칼국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 808 (성사동) 103호", "item": "칼국수", "lat": 37.6577793345656, "lng": 126.837837726033, "group": "한식"}, {"id": 54, "name": "월드사우나", "category": "목욕업", "district": "덕양구", "address": "경기도 고양시 덕양구 고양대로1315번길 86-18 2층~4층(주교동)", "item": "대인", "lat": 37.6594361781522, "lng": 126.830739834278, "group": "생활/여가/기타"}, {"id": 55, "name": "유소유", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 100 (토당동) 1층 114호", "item": "탕수육", "lat": 37.6260883105179, "lng": 126.824057521925, "group": "중식"}, {"id": 56, "name": "일산SK클라이밍", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로286번길 13-5 (마두동) 지층", "item": "베이직 기초강습(1개월)", "lat": 37.6618219403709, "lng": 126.78661307341, "group": "생활/여가/기타"}, {"id": 57, "name": "일산갈비", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 고양대로672번길 11 1층(일산동)", "item": "삼겹살100g", "lat": 37.6836494461578, "lng": 126.77056300179, "group": "한식"}, {"id": 58, "name": "일산돈가스", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 일중로 67-6 (일산동)", "item": "한식뷔페", "lat": 37.6858701555721, "lng": 126.774997017033, "group": "한식"}, {"id": 59, "name": "일산뽈집", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 168 (일산동) 2호", "item": "뽈살200g", "lat": 37.6777458211165, "lng": 126.770714493035, "group": "한식"}, {"id": 60, "name": "일오닭갈비", "category": "한식_육류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1305-56 (장항동) 라페스타D동 2층 201호", "item": "닭갈비(1인분)", "lat": 37.6610286903147, "lng": 126.76830760753, "group": "한식"}, {"id": 61, "name": "정감디자인스튜디오", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로 15 (장항동) 6층 605호", "item": "증명사진(8매)", "lat": 37.6564133865908, "lng": 126.77054892289, "group": "생활/여가/기타"}, {"id": 62, "name": "정다운분식", "category": "한식_분식", "district": "덕양구", "address": "경기도 고양시 덕양구 행신로143번길 28-34 (행신동) 104호", "item": "잔치국수", "lat": 37.6201380631005, "lng": 126.832509344564, "group": "한식"}, {"id": 63, "name": "정미용실", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 통일로 781 (관산동)", "item": "여자커트", "lat": 37.687828140781, "lng": 126.863598039208, "group": "미용/이용"}, {"id": 64, "name": "제이뷰티(Je Beauty)", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 원흥5로 25 (원흥동, 삼송원흥역센트럴푸르지오) 2층 217호", "item": "인중 왁싱(남성)", "lat": 37.6485750124376, "lng": 126.876556771514, "group": "미용/이용"}, {"id": 65, "name": "조선칼제비", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 토당로 115 1층 116호(토당동, 금호프라자)", "item": "들깨칼국수", "lat": 37.6254193067706, "lng": 126.816994100529, "group": "한식"}, {"id": 66, "name": "준탁구클럽", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 용현로5번길 24 207호(행신동, 백산오피스텔)", "item": "월레슨", "lat": 37.6135321883809, "lng": 126.834992009961, "group": "생활/여가/기타"}, {"id": 67, "name": "진가마솥돼지국밥", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로 142 (백석동) 1층 103호", "item": "돼지국밥", "lat": 37.6499235464051, "lng": 126.793731208213, "group": "한식"}, {"id": 68, "name": "진국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 2 1(일부)층(성사동)", "item": "잔치국수", "lat": 37.6578652346386, "lng": 126.838126753594, "group": "한식"}, {"id": 69, "name": "진커피", "category": "기타요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 100 112호 (토당동,파워프라자)", "item": "아메리카노", "lat": 37.6260883105179, "lng": 126.824057521925, "group": "카페/베이커리"}, {"id": 70, "name": "짐나지움 리틀&스위머스 탄", "category": "기타비요식업", "district": "일산서구", "address": "경기도 고양시 일산서구 일현로 140 (탄현동, 큰마을대림,현대아파트) 401호", "item": "성인수영반 월 레슨비", "lat": 37.7001466136168, "lng": 126.765548173106, "group": "생활/여가/기타"}, {"id": 71, "name": "짱구분식", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 82 (토당동, 휠탑빌라드)", "item": "김밥", "lat": 37.6244327132505, "lng": 126.824456989972, "group": "한식"}, {"id": 72, "name": "참치슈퍼", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 한류월드로 300 (대화동) 1179호", "item": "참다랑어(소)", "lat": 37.6645540981816, "lng": 126.754526582068, "group": "일식/양식"}, {"id": 73, "name": "첼로사진예술원", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로 170 (마두동) 202호", "item": "증명사진(9매)", "lat": 37.6539105078962, "lng": 126.784277135271, "group": "생활/여가/기타"}, {"id": 74, "name": "친친", "category": "중식", "district": "일산동구", "address": "경기도 고양시 일산동구 숲속마을1로 62-10 (풍동) 1층", "item": "짜장면", "lat": 37.6663735667529, "lng": 126.800653808406, "group": "중식"}, {"id": 75, "name": "코끼리김밥", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 59 107호(주엽동, 동신파크빌딩)", "item": "순두부찌개", "lat": 37.6695269076404, "lng": 126.764307728468, "group": "한식"}, {"id": 76, "name": "클럽클럽", "category": "이용업", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로789번길 6 1층 103호(주교동, 중앙빌딩)", "item": "남자커트", "lat": 37.6569880283436, "lng": 126.836096021601, "group": "미용/이용"}, {"id": 77, "name": "킹 당구클럽", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로6번길 36 3층 301~303호 (행신동,남정씨티프라자6차)", "item": "1시간", "lat": 37.614046396156, "lng": 126.833718262095, "group": "생활/여가/기타"}, {"id": 78, "name": "킹스크린골프", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 고봉로 32-12 (장항동) 5층 501~504호", "item": "주중 오전 (11시 이전)", "lat": 37.6643934379853, "lng": 126.765773331567, "group": "생활/여가/기타"}, {"id": 79, "name": "티파니", "category": "양식", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로 167 (마두동) 백암빌딩 1층 104호", "item": "새우 스파게티", "lat": 37.6535324803492, "lng": 126.783699834161, "group": "일식/양식"}, {"id": 80, "name": "팬브레드 PANBREAD", "category": "양식", "district": "덕양구", "address": "경기도 고양시 덕양구 흥도로417번길 10-17 (성사동) 1,2층", "item": "새우 크림 파스타", "lat": 37.6423957711046, "lng": 126.850232297213, "group": "일식/양식"}, {"id": 81, "name": "홍능골가든", "category": "한식_육류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 1268-7 (신원동)", "item": "돼지갈비100g", "lat": 37.6765448104028, "lng": 126.877442694281, "group": "한식"}, {"id": 82, "name": "홍두깨손칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1275번길 38-10 105-1호(장항동, 우림로데오스위트)", "item": "칼국수", "lat": 37.659914452377, "lng": 126.770892649054, "group": "한식"}, {"id": 83, "name": "황금콩짜장", "category": "중식", "district": "일산서구", "address": "경기도 고양시 일산서구 송산로 343 101호, 102호 (가좌동,송포프라자)", "item": "자장면", "lat": 37.6841330643554, "lng": 126.717124002649, "group": "중식"}, {"id": 84, "name": "황실짜장", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 20 101호 일부, 102호 일부(성사동)", "item": "유니짜장", "lat": 37.6574616992045, "lng": 126.838926818124, "group": "중식"}, {"id": 85, "name": "황태나라", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 숲속마을1로48번길 35 1층 상가(풍동)", "item": "된장찌개", "lat": 37.6667163257248, "lng": 126.800829478393, "group": "한식"}, {"id": 86, "name": "후스돈", "category": "한식_육류", "district": "덕양구", "address": "경기도 고양시 덕양구 마상로140번길 81 1층 (주교동,중경빌딩)", "item": "삼겹살100g", "lat": 37.6563804567281, "lng": 126.835162075538, "group": "한식"}, {"id": 87, "name": "흡이족발", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 킨텍스로 289 (대화동) 1층 101호", "item": "족발(대)", "lat": 37.6710653092733, "lng": 126.751995488189, "group": "한식"}];
+    const STORES = [
+      {"id": 1, "name": "(sky)커트클럽", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 152 (일산동) 106호", "item": "남자커트", "lat": 37.6765085686146, "lng": 126.769866084431, "group": "미용/이용"},
+      {"id": 2, "name": "62드립커피", "category": "기타요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 문봉길62번길 32-22 (문봉동) 1층", "item": "아메리카노", "lat": 37.7072337494199, "lng": 126.817697392564, "group": "카페/베이커리"},
+      {"id": 3, "name": "LCK전자", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 꽃마을로 46 (향동동) 1419호", "item": "출장수리비", "lat": 37.6012858991388, "lng": 126.892161201699, "group": "생활/여가/기타"},
+      {"id": 4, "name": "가온베이커리", "category": "베이커리", "district": "일산서구", "address": "경기도 고양시 일산서구 호수로 844 (대화동) 1층 103호", "item": "소금빵", "lat": 37.6702481474045, "lng": 126.74919513152, "group": "카페/베이커리"},
+      {"id": 5, "name": "가인헤어", "category": "미용업", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로88번길 8-11 (백석동) 1층", "item": "여성커트", "lat": 37.6476484713554, "lng": 126.789848147434, "group": "미용/이용"},
+      {"id": 6, "name": "고봉산 뼈 칼국수", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 무궁화로 20-11 (장항동) F동 119호", "item": "뼈칼국수", "lat": 37.6618340139268, "lng": 126.767543383883, "group": "한식"},
+      {"id": 7, "name": "고양 풀스윙 배팅센터", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 중앙로78번안길 119 (화전동) 비동", "item": "야구강습비 1회", "lat": 37.6002700309314, "lng": 126.875243759351, "group": "생활/여가/기타"},
+      {"id": 8, "name": "금석오리", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 꽃내음2길 50-2 (향동동) 1층", "item": "청국장", "lat": 37.6026026047579, "lng": 126.891178148989, "group": "한식"},
+      {"id": 9, "name": "기분좋은집", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1547 109호(대화동, KINTEX ZONE)", "item": "김밥", "lat": 37.6748086561938, "lng": 126.74954886289, "group": "한식"},
+      {"id": 10, "name": "김밥천사", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 충경로 38 1층 105호 (행신동, 진일프라자)", "item": "김밥", "lat": 37.6152019018014, "lng": 126.833710478936, "group": "한식"},
+      {"id": 11, "name": "김치찌개찌개", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 화신로 259 (화정동) 1층 101호", "item": "김치찌개", "lat": 37.6304152116174, "lng": 126.832419104114, "group": "한식"},
+      {"id": 12, "name": "까까 보까!", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 고양대로 719-12 (일산동, 산들마을6단지) 상가동 1층 104호", "item": "남자커트", "lat": 37.6839826397391, "lng": 126.776576155166, "group": "미용/이용"},
+      {"id": 13, "name": "냉동삼겹살", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로1261번길 17 (장항동) 2층 201호", "item": "점심뷔페", "lat": 37.6580203327856, "lng": 126.772808057261, "group": "한식"},
+      {"id": 14, "name": "네일도 반가워", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 킨텍스로 308 (주엽동) 상가동 109-1호", "item": "손 기본케어", "lat": 37.6720864807178, "lng": 126.753501344884, "group": "미용/이용"},
+      {"id": 15, "name": "달구족발", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 산현로92번길 60 (일산동) 114호-1", "item": "1kg족발", "lat": 37.6894236738297, "lng": 126.770822645745, "group": "한식"},
+      {"id": 16, "name": "대나무집", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로113번길 54-11 (백석동) 1층", "item": "능이닭곰탕", "lat": 37.6477897055783, "lng": 126.783940622866, "group": "한식"},
+      {"id": 17, "name": "도래울미용실", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 의장로 29-35 (도내동) 10호", "item": "여성커트", "lat": 37.6252054045044, "lng": 126.872862433134, "group": "미용/이용"},
+      {"id": 18, "name": "동양볼링장", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 816 4층(성사동, 동양빌딩)", "item": "1게임(일반)", "lat": 37.6580899280365, "lng": 126.838381369035, "group": "생활/여가/기타"},
+      {"id": 19, "name": "두리반찬", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 고봉로 20-21 (장항동) 117호", "item": "반찬(두부조림)", "lat": 37.663672082671, "lng": 126.765712129379, "group": "한식"},
+      {"id": 20, "name": "따뜻한 밥상 백석", "category": "한식_찌개류", "district": "일산동구", "address": "경기도 고양시 일산동구 백석로108번길 12 (백석동) 1층 일부호", "item": "김치찌개", "lat": 37.6484787274429, "lng": 126.789495100682, "group": "한식"},
+      {"id": 21, "name": "따뜻한 밥상 행신점", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로54번길 7-20 (행신동) 1층", "item": "김치찌개", "lat": 37.6185495413629, "lng": 126.832960093347, "group": "한식"},
+      {"id": 22, "name": "뚝방길생두루치기", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로6번길 12 (행신동) 101,102호", "item": "김치전골(2인)", "lat": 37.6130690857226, "lng": 126.833201138811, "group": "한식"},
+      {"id": 23, "name": "라브리", "category": "기타요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 원당로33번길 42-15 1층 (주교동)", "item": "아메리카노", "lat": 37.6582018826349, "lng": 126.830836246191, "group": "카페/베이커리"},
+      {"id": 24, "name": "라이프바디짐", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로196번길 7-5 (마두동) 라이프바디짐", "item": "헬스장 이용료(12개월)", "lat": 37.66318905, "lng": 126.78744048, "group": "생활/여가/기타"},
+      {"id": 25, "name": "레디퀸미용실", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1371 93-1호 1층(주엽동, 강선마을)", "item": "여자커트", "lat": 37.6671243360506, "lng": 126.765471646111, "group": "미용/이용"},
+      {"id": 26, "name": "마음한끼밥앤국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 서정마을2로 2 (행신동) 상가동 103호", "item": "잔치국수", "lat": 37.6207909663364, "lng": 126.845694239133, "group": "한식"},
+      {"id": 27, "name": "맛있는집", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1388 403호 (주엽동, 태영프라자)", "item": "된장찌개", "lat": 37.6683495423281, "lng": 126.765680991413, "group": "한식"},
+      {"id": 28, "name": "먹거리횟집", "category": "일식", "district": "일산동구", "address": "경기도 고양시 일산동구 백석로108번길 6-14 1층(백석동)", "item": "광어(중)", "lat": 37.6485708318108, "lng": 126.788601583957, "group": "일식/양식"},
+      {"id": 29, "name": "버블펫", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로 24 (장항동) 2층 A-263호", "item": "애견목욕(3kg이하)", "lat": 37.6558964094856, "lng": 126.772038816453, "group": "생활/여가/기타"},
+      {"id": 30, "name": "봄꽃네일", "category": "미용업", "district": "일산서구", "address": "경기도 고양시 일산서구 대화2로 137 (대화동) 상가동 2층 209호", "item": "속눈썹 펌", "lat": 37.6731243211164, "lng": 126.736178247722, "group": "미용/이용"},
+      {"id": 31, "name": "비스트로 케이(Bistro K)", "category": "양식", "district": "덕양구", "address": "경기도 고양시 덕양구 토당로 105 (토당동) 1층 106호", "item": "파스타", "lat": 37.6246372480964, "lng": 126.816643949728, "group": "일식/양식"},
+      {"id": 32, "name": "빵이랑", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 고양대로1384번길 6 (성사동) 어울림마을8단지 상가동 1층 9호", "item": "생크림케이크", "lat": 37.6539994959491, "lng": 126.837153431592, "group": "카페/베이커리"},
+      {"id": 33, "name": "살롱드헤어베리", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 도래울로 54 (도내동) 2층 203호", "item": "커트(여성)", "lat": 37.6306827129164, "lng": 126.869591788846, "group": "미용/이용"},
+      {"id": 34, "name": "삼원각", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 삼원로 2 (삼송동) 101,102호", "item": "짜장면", "lat": 37.6451579161333, "lng": 126.877480911566, "group": "중식"},
+      {"id": 35, "name": "삼파전", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 탄중로 311-16 (중산동,한진프라자 106호)", "item": "삼겹살100g", "lat": 37.6942081209285, "lng": 126.78014506906, "group": "한식"},
+      {"id": 36, "name": "상현스시", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 10 (탄현동) 1층", "item": "상현세트(초밥세트)", "lat": 37.6938556376355, "lng": 126.769747512506, "group": "일식/양식"},
+      {"id": 37, "name": "송송푸드", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1322 (정발산동) 1층 111-1호", "item": "라면", "lat": 37.6636768854432, "lng": 126.770816710089, "group": "한식"},
+      {"id": 38, "name": "순이네연탄갈비", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 16 (탄현동) 1층 상가", "item": "돼지갈비250g", "lat": 37.694099583968, "lng": 126.769682129544, "group": "한식"},
+      {"id": 39, "name": "신김밥천국", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 도래울1로 57 (도내동) 1층", "item": "김밥", "lat": 37.6286551593458, "lng": 126.869125768532, "group": "한식"},
+      {"id": 40, "name": "아하푸드", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 무궁화로 32-34 (장항동) 라페스타C동 117호", "item": "떡볶이", "lat": 37.6613188687547, "lng": 126.76879891373, "group": "한식"},
+      {"id": 41, "name": "앤도로시 샌드위치", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 용현로 21 (행신동) 103호", "item": "클럽샌드위치", "lat": 37.6146936611012, "lng": 126.835515096941, "group": "카페/베이커리"},
+      {"id": 42, "name": "양푼이생태탕", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 탄중로221번길 13 (탄현동) 1층", "item": "생태찌개", "lat": 37.6939309022068, "lng": 126.769441711845, "group": "한식"},
+      {"id": 43, "name": "어울림탁구장", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 원당로33번길 11 (주교동) 301호", "item": "월 회비", "lat": 37.6566374025653, "lng": 126.831517149083, "group": "생활/여가/기타"},
+      {"id": 44, "name": "영심이", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 마상로 140번길 2 1층(주교동, 화성빌딩)", "item": "떡볶이", "lat": 37.6592664701361, "lng": 126.838017293786, "group": "한식"},
+      {"id": 45, "name": "옛날칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 산두로 269-19 1층 (정발산동)", "item": "칼국수", "lat": 37.6747062896805, "lng": 126.777109645271, "group": "한식"},
+      {"id": 46, "name": "오늘도 응원할게", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 동송로 33 (동산동) 상가동 1층 27호", "item": "돼지불백 덮밥", "lat": 37.6490641128528, "lng": 126.896975022417, "group": "한식"},
+      {"id": 47, "name": "오늘은 바다", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 대화로 136 (대화동) 103호", "item": "연어초밥", "lat": 37.67062483046, "lng": 126.735293916334, "group": "일식/양식"},
+      {"id": 48, "name": "오병이어 커트하우스", "category": "이용업", "district": "일산서구", "address": "경기도 고양시 일산서구 중앙로 1391 (주엽동, 강선마을12단지아파트) 1층 제에스-12호", "item": "남자커트", "lat": 37.6679637231098, "lng": 126.764630034382, "group": "미용/이용"},
+      {"id": 49, "name": "오직 손 칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1130 (마두동, 강촌마을6단지아파트) 상가동 1층 A1-11호", "item": "들깨칼국수(2인)", "lat": 37.6501177027389, "lng": 126.780207120567, "group": "한식"},
+      {"id": 50, "name": "온담김밥", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 동송로 70 (삼송동) 1층 147호", "item": "김밥", "lat": 37.6526798112838, "lng": 126.896113096163, "group": "한식"},
+      {"id": 51, "name": "와이제이컴퍼니(YJ COMPANY)", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로 452 (정발산동) 304호", "item": "증명사진(8매)", "lat": 37.6740441266291, "lng": 126.776948397622, "group": "생활/여가/기타"},
+      {"id": 52, "name": "원당식빵", "category": "베이커리", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 15 1(일부)층 (성사동)", "item": "단팥빵", "lat": 37.6577429834323, "lng": 126.838793389639, "group": "카페/베이커리"},
+      {"id": 53, "name": "원당칼국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 808 (성사동) 103호", "item": "칼국수", "lat": 37.6577793345656, "lng": 126.837837726033, "group": "한식"},
+      {"id": 54, "name": "월드사우나", "category": "목욕업", "district": "덕양구", "address": "경기도 고양시 덕양구 고양대로1315번길 86-18 2층~4층(주교동)", "item": "대인", "lat": 37.6594361781522, "lng": 126.830739834278, "group": "생활/여가/기타"},
+      {"id": 55, "name": "유소유", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 100 (토당동) 1층 114호", "item": "탕수육", "lat": 37.6260883105179, "lng": 126.824057521925, "group": "중식"},
+      {"id": 56, "name": "일산SK클라이밍", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로286번길 13-5 (마두동) 지층", "item": "베이직 기초강습(1개월)", "lat": 37.6618219403709, "lng": 126.78661307341, "group": "생활/여가/기타"},
+      {"id": 57, "name": "일산갈비", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 고양대로672번길 11 1층(일산동)", "item": "삼겹살100g", "lat": 37.6836494461578, "lng": 126.77056300179, "group": "한식"},
+      {"id": 58, "name": "일산돈가스", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 일중로 67-6 (일산동)", "item": "한식뷔페", "lat": 37.6858701555721, "lng": 126.774997017033, "group": "한식"},
+      {"id": 59, "name": "일산뽈집", "category": "한식_육류", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 168 (일산동) 2호", "item": "뽈살200g", "lat": 37.6777458211165, "lng": 126.770714493035, "group": "한식"},
+      {"id": 60, "name": "일오닭갈비", "category": "한식_육류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1305-56 (장항동) 라페스타D동 2층 201호", "item": "닭갈비(1인분)", "lat": 37.6610286903147, "lng": 126.76830760753, "group": "한식"},
+      {"id": 61, "name": "정감디자인스튜디오", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 정발산로 15 (장항동) 6층 605호", "item": "증명사진(8매)", "lat": 37.6564133865908, "lng": 126.77054892289, "group": "생활/여가/기타"},
+      {"id": 62, "name": "정다운분식", "category": "한식_분식", "district": "덕양구", "address": "경기도 고양시 덕양구 행신로143번길 28-34 (행신동) 104호", "item": "잔치국수", "lat": 37.6201380631005, "lng": 126.832509344564, "group": "한식"},
+      {"id": 63, "name": "정미용실", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 통일로 781 (관산동)", "item": "여자커트", "lat": 37.687828140781, "lng": 126.863598039208, "group": "미용/이용"},
+      {"id": 64, "name": "제이뷰티(Je Beauty)", "category": "미용업", "district": "덕양구", "address": "경기도 고양시 덕양구 원흥5로 25 (원흥동, 삼송원흥역센트럴푸르지오) 2층 217호", "item": "인중 왁싱(남성)", "lat": 37.6485750124376, "lng": 126.876556771514, "group": "미용/이용"},
+      {"id": 65, "name": "조선칼제비", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 토당로 115 1층 116호(토당동, 금호프라자)", "item": "들깨칼국수", "lat": 37.6254193067706, "lng": 126.816994100529, "group": "한식"},
+      {"id": 66, "name": "준탁구클럽", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 용현로5번길 24 207호(행신동, 백산오피스텔)", "item": "월레슨", "lat": 37.6135321883809, "lng": 126.834992009961, "group": "생활/여가/기타"},
+      {"id": 67, "name": "진가마솥돼지국밥", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 일산로 142 (백석동) 1층 103호", "item": "돼지국밥", "lat": 37.6499235464051, "lng": 126.793731208213, "group": "한식"},
+      {"id": 68, "name": "진국수", "category": "한식_면류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 2 1(일부)층(성사동)", "item": "잔치국수", "lat": 37.6578652346386, "lng": 126.838126753594, "group": "한식"},
+      {"id": 69, "name": "진커피", "category": "기타요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 100 112호 (토당동,파워프라자)", "item": "아메리카노", "lat": 37.6260883105179, "lng": 126.824057521925, "group": "카페/베이커리"},
+      {"id": 70, "name": "짐나지움 리틀&스위머스 탄", "category": "기타비요식업", "district": "일산서구", "address": "경기도 고양시 일산서구 일현로 140 (탄현동, 큰마을대림,현대아파트) 401호", "item": "성인수영반 월 레슨비", "lat": 37.7001466136168, "lng": 126.765548173106, "group": "생활/여가/기타"},
+      {"id": 71, "name": "짱구분식", "category": "한식_일반", "district": "덕양구", "address": "경기도 고양시 덕양구 지도로 82 (토당동, 휠탑빌라드)", "item": "김밥", "lat": 37.6244327132505, "lng": 126.824456989972, "group": "한식"},
+      {"id": 72, "name": "참치슈퍼", "category": "일식", "district": "일산서구", "address": "경기도 고양시 일산서구 한류월드로 300 (대화동) 1179호", "item": "참다랑어(소)", "lat": 37.6645540981816, "lng": 126.754526582068, "group": "일식/양식"},
+      {"id": 73, "name": "첼로사진예술원", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로 170 (마두동) 202호", "item": "증명사진(9매)", "lat": 37.6539105078962, "lng": 126.784277135271, "group": "생활/여가/기타"},
+      {"id": 74, "name": "친친", "category": "중식", "district": "일산동구", "address": "경기도 고양시 일산동구 숲속마을1로 62-10 (풍동) 1층", "item": "짜장면", "lat": 37.6663735667529, "lng": 126.800653808406, "group": "중식"},
+      {"id": 75, "name": "코끼리김밥", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 강선로 59 107호(주엽동, 동신파크빌딩)", "item": "순두부찌개", "lat": 37.6695269076404, "lng": 126.764307728468, "group": "한식"},
+      {"id": 76, "name": "클럽클럽", "category": "이용업", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로789번길 6 1층 103호(주교동, 중앙빌딩)", "item": "남자커트", "lat": 37.6569880283436, "lng": 126.836096021601, "group": "미용/이용"},
+      {"id": 77, "name": "킹 당구클럽", "category": "기타비요식업", "district": "덕양구", "address": "경기도 고양시 덕양구 무원로6번길 36 3층 301~303호 (행신동,남정씨티프라자6차)", "item": "1시간", "lat": 37.614046396156, "lng": 126.833718262095, "group": "생활/여가/기타"},
+      {"id": 78, "name": "킹스크린골프", "category": "기타비요식업", "district": "일산동구", "address": "경기도 고양시 일산동구 고봉로 32-12 (장항동) 5층 501~504호", "item": "주중 오전 (11시 이전)", "lat": 37.6643934379853, "lng": 126.765773331567, "group": "생활/여가/기타"},
+      {"id": 79, "name": "티파니", "category": "양식", "district": "일산동구", "address": "경기도 고양시 일산동구 강송로 167 (마두동) 백암빌딩 1층 104호", "item": "새우 스파게티", "lat": 37.6535324803492, "lng": 126.783699834161, "group": "일식/양식"},
+      {"id": 80, "name": "팬브레드 PANBREAD", "category": "양식", "district": "덕양구", "address": "경기도 고양시 덕양구 흥도로417번길 10-17 (성사동) 1,2층", "item": "새우 크림 파스타", "lat": 37.6423957711046, "lng": 126.850232297213, "group": "일식/양식"},
+      {"id": 81, "name": "홍능골가든", "category": "한식_육류", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로 1268-7 (신원동)", "item": "돼지갈비100g", "lat": 37.6765448104028, "lng": 126.877442694281, "group": "한식"},
+      {"id": 82, "name": "홍두깨손칼국수", "category": "한식_면류", "district": "일산동구", "address": "경기도 고양시 일산동구 중앙로 1275번길 38-10 105-1호(장항동, 우림로데오스위트)", "item": "칼국수", "lat": 37.659914452377, "lng": 126.770892649054, "group": "한식"},
+      {"id": 83, "name": "황금콩짜장", "category": "중식", "district": "일산서구", "address": "경기도 고양시 일산서구 송산로 343 101호, 102호 (가좌동,송포프라자)", "item": "자장면", "lat": 37.6841330643554, "lng": 126.717124002649, "group": "중식"},
+      {"id": 84, "name": "황실짜장", "category": "중식", "district": "덕양구", "address": "경기도 고양시 덕양구 호국로812번길 20 101호 일부, 102호 일부(성사동)", "item": "유니짜장", "lat": 37.6574616992045, "lng": 126.838926818124, "group": "중식"},
+      {"id": 85, "name": "황태나라", "category": "한식_일반", "district": "일산동구", "address": "경기도 고양시 일산동구 숲속마을1로48번길 35 1층 상가(풍동)", "item": "된장찌개", "lat": 37.6667163257248, "lng": 126.800829478393, "group": "한식"},
+      {"id": 86, "name": "후스돈", "category": "한식_육류", "district": "덕양구", "address": "경기도 고양시 덕양구 마상로140번길 81 1층 (주교동,중경빌딩)", "item": "삼겹살100g", "lat": 37.6563804567281, "lng": 126.835162075538, "group": "한식"},
+      {"id": 87, "name": "흡이족발", "category": "한식_일반", "district": "일산서구", "address": "경기도 고양시 일산서구 킨텍스로 289 (대화동) 1층 101호", "item": "족발(대)", "lat": 37.6710653092733, "lng": 126.751995488189, "group": "한식"}
+    ];
 
-    // Map Poster Init
+    // Map Init
     const map = L.map('mapPoster', {
-      zoomControl: false,
+      zoomControl: true,
       attributionControl: false
     }).setView([37.65836, 126.81204], 12);
 
@@ -352,7 +552,7 @@
 
     STORES.forEach(s => {
       const color = getMarkerColor(s.group);
-      L.circleMarker([s.lat, s.lng], {
+      const marker = L.circleMarker([s.lat, s.lng], {
         radius: 7,
         fillColor: color,
         color: '#ffffff',
@@ -360,9 +560,19 @@
         opacity: 1,
         fillOpacity: 0.95
       }).addTo(map);
+
+      // Tooltip/Popup for mobile touch
+      marker.bindPopup(`
+        <div style="font-size:13px; font-family:'Pretendard', sans-serif;">
+          <strong style="color:#1e3a8a; font-size:14px;">${s.name}</strong><br>
+          <span style="color:#64748b;">${s.group} | ${s.district}</span><br>
+          <div style="margin-top:4px; font-weight:700; color:#ea580c;">대표: ${s.item}</div>
+          <div style="margin-top:2px; font-size:11px; color:#94a3b8;">${s.address}</div>
+        </div>
+      `);
     });
 
-    // Donut Chart
+    // Donut Chart Init
     const ctx = document.getElementById('categoryDonut').getContext('2d');
     new Chart(ctx, {
       type: 'doughnut',
@@ -370,7 +580,9 @@
         labels: ['한식 (41)', '중식 (5)', '일식·양식 (7)', '카페·베이커리 (7)', '미용·헤어 (12)', '생활·여가 (15)'],
         datasets: [{
           data: [41, 5, 7, 7, 12, 15],
-          backgroundColor: ['#ea580c', '#dc2626', '#e11d48', '#d97706', '#7c3aed', '#0891b2']
+          backgroundColor: ['#ea580c', '#dc2626', '#e11d48', '#d97706', '#7c3aed', '#0891b2'],
+          borderWidth: 2,
+          borderColor: '#ffffff'
         }]
       },
       options: {
@@ -379,10 +591,21 @@
         plugins: {
           legend: {
             position: 'right',
-            labels: { boxWidth: 12, font: { size: 11 } }
+            labels: { 
+              boxWidth: 12, 
+              padding: 10,
+              font: { size: 11, family: 'Pretendard' } 
+            }
           }
         }
       }
+    });
+
+    // Window Resize / Orientation Change Handler for Leaflet
+    window.addEventListener('resize', () => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 200);
     });
   </script>
 </body>
