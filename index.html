@@ -161,6 +161,18 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
+    .pill-text-short, .action-text-short {
+      display: none;
+    }
+
+    .pill-text-full, .action-text-full {
+      display: inline;
+    }
+
+    .mobile-sheet-handle {
+      display: none;
+    }
+
     /* Main Container */
     .app-main {
       flex: 1;
@@ -820,17 +832,87 @@
         flex-direction: column-reverse;
       }
 
+      /* Compact Top Promo Bar */
+      .promo-bar {
+        padding: 7px 10px;
+        min-height: 44px;
+        gap: 6px;
+      }
+
+      .promo-left {
+        gap: 6px;
+        min-width: 0;
+        flex-shrink: 1;
+      }
+
+      .promo-logo {
+        font-size: 0.94rem;
+        gap: 5px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .promo-logo i {
+        font-size: 1.05rem;
+      }
+
+      .cashback-pill {
+        padding: 3px 7px;
+        font-size: 0.72rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .pill-text-full {
+        display: none;
+      }
+      .pill-text-short {
+        display: inline;
+      }
+
+      .promo-actions {
+        gap: 4px;
+        flex-shrink: 0;
+      }
+
+      .btn-action {
+        padding: 4px 7px;
+        font-size: 0.72rem;
+        gap: 4px;
+        white-space: nowrap;
+      }
+
+      .action-text-full {
+        display: none;
+      }
+      .action-text-short {
+        display: inline;
+      }
+
+      /* Sidebar: Expand store rolling list area drastically */
       .sidebar {
         width: 100%;
         min-width: 100%;
-        height: 52vh;
+        height: 68vh;
         border-right: none;
         border-top: 1px solid var(--border-color);
         box-shadow: 0 -4px 15px rgba(0,0,0,0.06);
+        transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar.expanded {
+        height: 85vh;
       }
 
       .map-container {
-        height: 48vh;
+        height: 32vh;
+        transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .map-container.shrunk {
+        height: 15vh;
       }
 
       .promo-desc {
@@ -843,6 +925,144 @@
 
       .infographic-grid {
         grid-template-columns: 1fr;
+      }
+
+      /* Mobile Sheet Handle (Pill) */
+      .mobile-sheet-handle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 0 4px;
+        background: #f1f5f9;
+        cursor: pointer;
+        user-select: none;
+        border-bottom: 1px solid var(--border-color);
+        transition: background 0.15s ease;
+      }
+
+      .mobile-sheet-handle:active {
+        background: #e2e8f0;
+      }
+
+      .mobile-sheet-handle .handle-bar {
+        width: 36px;
+        height: 4px;
+        border-radius: 9999px;
+        background: #cbd5e1;
+      }
+
+      .mobile-sheet-handle .handle-text {
+        font-size: 0.67rem;
+        color: var(--text-muted);
+        font-weight: 700;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* Compact Filter Section */
+      .filter-section {
+        padding: 8px 12px 6px;
+        gap: 6px;
+      }
+
+      .stats-summary {
+        padding: 3px;
+        gap: 4px;
+      }
+
+      .stat-box {
+        padding: 3px 1px;
+      }
+
+      .stat-label {
+        font-size: 0.68rem;
+      }
+
+      .stat-count {
+        font-size: 0.94rem;
+      }
+
+      .search-wrapper {
+        margin: 0;
+      }
+
+      .search-input {
+        padding: 6px 30px 6px 30px;
+        font-size: 0.84rem;
+        border-radius: 8px;
+      }
+
+      .search-icon {
+        left: 9px;
+        font-size: 0.82rem;
+      }
+
+      .category-pills {
+        gap: 4px;
+        padding-bottom: 2px;
+      }
+
+      .pill-btn {
+        padding: 3.5px 8px;
+        font-size: 0.74rem;
+        gap: 4px;
+      }
+
+      .list-meta-bar {
+        padding: 5px 12px;
+        font-size: 0.76rem;
+      }
+
+      .gps-btn {
+        padding: 3px 8px;
+        font-size: 0.72rem;
+      }
+
+      /* Store List & Cards */
+      .store-list-container {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+
+      .store-card {
+        padding: 10px 12px;
+      }
+
+      .store-title {
+        font-size: 0.98rem;
+        margin-bottom: 4px;
+      }
+
+      .store-menu {
+        font-size: 0.81rem;
+        padding: 4px 7px;
+        margin-bottom: 6px;
+      }
+
+      .store-address {
+        font-size: 0.76rem;
+        margin-bottom: 6px;
+      }
+
+      .card-footer {
+        padding-top: 6px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .promo-logo span {
+        font-size: 0.88rem;
+      }
+      .cashback-pill {
+        padding: 2.5px 5px;
+        font-size: 0.68rem;
+      }
+      .btn-action {
+        padding: 3px 6px;
+        font-size: 0.68rem;
       }
     }
 
@@ -867,11 +1087,12 @@
     <div class="promo-left">
       <div class="promo-logo">
         <i class="fa-solid fa-map-location-dot"></i>
-        <span>고양특례시 착한가격업소</span>
+        <span>고양시 착한가격업소</span>
       </div>
       <div class="cashback-pill">
         <i class="fa-solid fa-coins"></i>
-        <span>고양페이 +5% 추가 캐시백</span>
+        <span class="pill-text-full">고양페이 +5% 추가 캐시백</span>
+        <span class="pill-text-short">+5% 캐시백</span>
       </div>
     </div>
     <div class="promo-desc">
@@ -879,13 +1100,15 @@
       <span><i class="fa-solid fa-wallet"></i> 충전금 결제 시 5% 캐시백</span>
     </div>
     <div class="promo-actions">
-      <button class="btn-action" id="btnOpenModal">
+      <button class="btn-action" id="btnOpenModal" title="통계 & 인포그래픽">
         <i class="fa-solid fa-chart-pie"></i>
-        <span>통계 & 인포그래픽</span>
+        <span class="action-text-full">통계 & 인포그래픽</span>
+        <span class="action-text-short">통계</span>
       </button>
-      <button class="btn-action" id="btnHelp">
+      <button class="btn-action" id="btnHelp" title="혜택 안내">
         <i class="fa-solid fa-circle-info"></i>
-        <span>혜택 안내</span>
+        <span class="action-text-full">혜택 안내</span>
+        <span class="action-text-short">혜택</span>
       </button>
     </div>
   </header>
@@ -895,6 +1118,12 @@
 
     <!-- Left Sidebar -->
     <aside class="sidebar">
+
+      <!-- Mobile Sheet Toggle (Drag / Click Bar) -->
+      <div class="mobile-sheet-handle" id="mobileSheetHandle" title="목록 펼치기 / 접기">
+        <div class="handle-bar"></div>
+        <span class="handle-text" id="handleText"><i class="fa-solid fa-chevron-up"></i> 상점 목록 더 넓게 보기</span>
+      </div>
 
       <!-- Filter Section -->
       <div class="filter-section">
@@ -1507,6 +1736,27 @@
 ○ 혜택내용: 본인 충전금 사용액의 5% 즉시 추가 캐시백 지급
 ※ 주의사항: 지자체 지급 인센티브 사용분은 캐시백 산정에서 제외됩니다.`);
     });
+
+    // Mobile Sheet Toggle
+    const mobileHandle = document.getElementById('mobileSheetHandle');
+    const sidebarEl = document.querySelector('.sidebar');
+    const mapContainerEl = document.querySelector('.map-container');
+    const handleText = document.getElementById('handleText');
+
+    if (mobileHandle) {
+      mobileHandle.addEventListener('click', () => {
+        const isExpanded = sidebarEl.classList.toggle('expanded');
+        mapContainerEl.classList.toggle('shrunk', isExpanded);
+        if (handleText) {
+          handleText.innerHTML = isExpanded 
+            ? '<i class="fa-solid fa-chevron-down"></i> 지도 더 넓게 보기' 
+            : '<i class="fa-solid fa-chevron-up"></i> 상점 목록 더 넓게 보기';
+        }
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 320);
+      });
+    }
 
     // Start App
     initMarkers();
